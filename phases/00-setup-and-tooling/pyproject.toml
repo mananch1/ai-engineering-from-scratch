@@ -1,0 +1,28 @@
+[project]
+name = "00-setup-and-tooling"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Manan Chahal", email = "mananchahal01@gmail.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "jupyter>=1.1.1",
+    "matplotlib>=3.11.2",
+    "numpy>=2.5.3",
+    "qdrant-client>=1.19.1",
+    "scikit-learn>=1.9.1",
+]
+
+[project.scripts]
+00-setup-and-tooling = "00_setup_and_tooling:main"
+
+[build-system]
+requires = ["uv_build>=0.12.2,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "ipykernel>=7.3.0",
+]

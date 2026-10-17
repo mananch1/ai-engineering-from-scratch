@@ -9,13 +9,13 @@
 
 ## The Problem
 
-A naive autoregressive decoder does `O(N²)` work to generate `N` tokens: at each step it recomputes attention over the full prefix. For a 4K-token response that is 16M attention operations, most of them redundant. Every hidden state of a prefix token is deterministic once computed — you only need to run the new token's query against the cached keys and values of everything before.
+A naive autoregressive decoder does $O(N^2)$ work to generate $N$ tokens: at each step it recomputes attention over the full prefix. For a 4K-token response that is 16M attention operations, most of them redundant. Every hidden state of a prefix token is deterministic once computed — you only need to run the new token's query against the cached keys and values of everything before.
 
 On top of that, attention itself moves a lot of data. Standard attention materializes an N×N score matrix, N×d softmax output, N×d final output — too many reads and writes to HBM. For N≥2K, attention becomes memory-bound before it becomes FLOP-bound. Classic attention kernels underuse modern GPUs by 4–10×.
 
 Two optimizations, both from Dao et al., pushed frontier inference from "slow" to "fast":
 
-1. **KV cache.** Store the K and V vectors of every prefix token. Each new token's attention is one query against the cached keys. Inference reduces from `O(N²)` to `O(N)` per generation step.
+1. **KV cache.** Store the K and V vectors of every prefix token. Each new token's attention is one query against the cached keys. Inference reduces from $O(N^2)$ to $O(N)$ per generation step.
 2. **Flash Attention.** Tile the attention computation so the full N×N matrix never hits HBM. All of softmax + matmul happens in SRAM. 2–4× wall-clock speedup on A100; 5–10× on H100 with FP8.
 
 By 2026 both are universal. Every production inference stack (vLLM, TensorRT-LLM, SGLang, llama.cpp) assumes them. Every frontier model ships with Flash Attention enabled.
@@ -84,7 +84,7 @@ for each block of Q (tile size ~128 × 128):
     write O_tile to HBM
 ```
 
-One HBM trip per tile. Total memory footprint drops from `O(N²)` to `O(N)`. Backward pass recomputes some values from the forward pass instead of storing them — another memory win.
+One HBM trip per tile. Total memory footprint drops from $O(N^2)$ to $O(N)$. Backward pass recomputes some values from the forward pass instead of storing them — another memory win.
 
 **Numerical trick.** Running softmax maintains `(max, sum)` across tiles so the final normalization is exact. Not an approximation — Flash Attention computes bit-identical output to standard attention (modulo fp16 non-associativity).
 
@@ -126,8 +126,8 @@ flash-attention-memory
 
 See `code/main.py`. We implement:
 
-1. A naive `O(N²)` incremental decoder.
-2. A `O(N)` KV-cached decoder.
+1. A naive $O(N^2)$ incremental decoder.
+2. A $O(N)$ KV-cached decoder.
 3. A tiled softmax that simulates Flash Attention's running-max algorithm.
 
 ### Step 1: KV cache
@@ -174,7 +174,7 @@ Bit-identical output to `softmax(qK) V` in one shot, but at any time the working
 
 ### Step 3: compare naive vs cached decoding on 100-token generation
 
-Count attention operations. Naive: `O(N²)` = 5050. Cached: `O(N)` = 100. The code prints both.
+Count attention operations. Naive: $O(N^2)$ = 5050. Cached: $O(N)$ = 100. The code prints both.
 
 ## Use It
 

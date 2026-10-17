@@ -1,0 +1,753 @@
+{
+  "planned": [
+    {
+      "id": "photo-burst-contact-sheet",
+      "title": "Photo Burst Contact Sheet",
+      "level": 1,
+      "source": "core",
+      "status": "planned",
+      "track": "applications",
+      "languages": [
+        "Python"
+      ],
+      "tagline": "Compare similar photos before choosing what to keep.",
+      "summary": "Help a creator review repeated shots by computing simple pixel fingerprints and an inspectable sharpness measure. Group candidate duplicates, preserve the photographer's final choice, and export a contact sheet plus a selection manifest for an editor.",
+      "output": "HTML and PNG contact sheets, similarity explanations and selections.json",
+      "prerequisiteProjects": [],
+      "milestones": [
+        "Decode images and preserve source dimensions",
+        "Compute pixel fingerprints and sharpness measures",
+        "Group similar shots for manual selection",
+        "Export a contact sheet and editor selection manifest"
+      ],
+      "references": [],
+      "distinctFrom": "Visual Evidence Library searches supplied text regions; this compares actual image pixels for photo selection.",
+      "firstDemo": "Group original geometric scene images with blur, crop and exposure variations while leaving a different scene separate.",
+      "originalFixture": "Original generated geometric scene images with explicitly authored transformations"
+    },
+    {
+      "id": "dependency-upgrade-impact-map",
+      "title": "Dependency Upgrade Impact Map",
+      "level": 2,
+      "source": "core",
+      "status": "planned",
+      "track": "platform",
+      "languages": [
+        "Python",
+        "TypeScript"
+      ],
+      "tagline": "Show which call sites need attention when a dependency contract changes.",
+      "summary": "Help a maintainer review an upgrade using supplied before/after API signatures and a bounded source parser. Map changed symbols to actual call sites, distinguish confirmed incompatibilities from unresolved uses, and emit a targeted test checklist. An optional model can explain evidence but cannot invent removed APIs.",
+      "output": "Call-site impact graph, SARIF findings and targeted test checklist",
+      "prerequisiteProjects": [
+        "pr-review-reporter"
+      ],
+      "milestones": [
+        "Read supplied old and new API contracts",
+        "Index supported import and call-site forms",
+        "Link changed signatures to affected code",
+        "Export findings with unresolved cases visible"
+      ],
+      "references": [],
+      "distinctFrom": "PR Review Reporter checks changed lines; this connects old and new dependency contracts to call sites throughout a repository.",
+      "firstDemo": "Change an authored library signature and identify two affected callers plus one unresolved dynamic call."
+    },
+    {
+      "id": "gesture-shortcut-pad",
+      "title": "Gesture Shortcut Pad",
+      "level": 2,
+      "source": "core",
+      "status": "planned",
+      "track": "applications",
+      "languages": [
+        "TypeScript"
+      ],
+      "tagline": "Teach a small app your own drawn shortcuts.",
+      "summary": "Help a presenter or educator control a local practice application with a few self-recorded gestures. Normalize pointer strokes, compare them with an explicit sequence-distance algorithm, expose uncertain matches, and export a portable gesture profile plus a small browser integration demo.",
+      "output": "An interactive gesture pad, gesture-profile.json and label events for another browser app",
+      "prerequisiteProjects": [],
+      "milestones": [
+        "Capture and normalize original pointer strokes",
+        "Compare strokes with an inspectable distance function",
+        "Review uncertain matches and add better examples",
+        "Export the gesture profile and demonstrate app integration"
+      ],
+      "references": [],
+      "distinctFrom": "Desktop Control executes coordinate actions; this learns labels from pointer gestures and integrates them into a local application.",
+      "firstDemo": "Draw three original gesture classes to navigate a fictional slide deck and inspect an ambiguous stroke.",
+      "originalFixture": "New recorded pointer strokes and a tiny authored browser slideshow"
+    },
+    {
+      "id": "ci-failure-reproducer",
+      "title": "CI Failure Reproducer",
+      "level": 3,
+      "source": "core",
+      "status": "planned",
+      "track": "platform",
+      "languages": [
+        "Python",
+        "TypeScript"
+      ],
+      "tagline": "Turn a failed build log into a small, reviewable reproduction recipe.",
+      "summary": "Help a contributor reproduce a failed job from an exported workflow log, commit identity and declared environment. Identify the first failing command, distinguish infrastructure failures from test failures, and produce an allowlisted local replay recipe. Retain the original log lines beside every generated instruction.",
+      "output": "Reproduction manifest, shell-free replay CLI and HTML failure brief",
+      "prerequisiteProjects": [
+        "tiny-coding-agent",
+        "pr-review-reporter"
+      ],
+      "milestones": [
+        "Normalize job steps and source line ranges",
+        "Separate the initiating failure from downstream noise",
+        "Build an explicit replay recipe",
+        "Run an approved local command and compare evidence"
+      ],
+      "references": [
+        "https://docs.github.com/en/actions/how-tos/monitor-workflows/use-workflow-run-logs"
+      ],
+      "distinctFrom": "Tiny Coding Agent patches a local workspace; this recovers the environment and minimal replay steps from a failed CI job.",
+      "firstDemo": "Reduce an authored failed job to a three-step local reproduction while retaining the original failure lines."
+    },
+    {
+      "id": "label-adjudication-desk",
+      "title": "Label Adjudication Desk",
+      "level": 3,
+      "source": "core",
+      "status": "planned",
+      "track": "systems",
+      "languages": [
+        "Python",
+        "TypeScript"
+      ],
+      "tagline": "Turn annotator disagreements into a traceable evaluation dataset.",
+      "summary": "Help a small team create useful evaluation labels without silently replacing disagreement with majority vote. Import independently labeled records, blind annotator identities during review, group disagreements and capture an explicit final decision with its evidence. Export a local review page and versioned JSONL that preserves both original labels and adjudication history.",
+      "output": "Local adjudication UI, agreement report and provenance-preserving labeled JSONL",
+      "prerequisiteProjects": [
+        "dataset-split-auditor",
+        "feedback-theme-board"
+      ],
+      "milestones": [
+        "Import independent labels and preserve record provenance",
+        "Measure agreement and build a blinded review queue",
+        "Capture evidence-backed adjudication decisions",
+        "Export versioned labels with unresolved cases visible"
+      ],
+      "references": [],
+      "distinctFrom": "Dataset Split Auditor checks dataset separation and Feedback Theme Board groups comments; this project produces accountable human reference labels for evaluations.",
+      "firstDemo": "Review three disagreements in an authored annotation set and export both accepted decisions and one unresolved case.",
+      "implementationBoundary": "Retain unresolved judgments and raw agreement counts. Inter-annotator agreement measures consistency, not the objective truth of a label."
+    },
+    {
+      "id": "lost-item-match-desk",
+      "title": "Lost Item Match Desk",
+      "level": 3,
+      "source": "core",
+      "status": "planned",
+      "track": "applications",
+      "languages": [
+        "Python"
+      ],
+      "tagline": "Compare likely item matches without pretending a score proves ownership.",
+      "summary": "Help a community venue match lost-item descriptions with photographed found objects. Combine explicit text features, simple image-color descriptors and optional reviewed vision proposals, then export an HTML candidate-pair desk and a decision file for the venue's existing records.",
+      "output": "An HTML object-pair review desk, feature explanations and match-decisions.json",
+      "prerequisiteProjects": [
+        "catalog-record-linker",
+        "photo-burst-contact-sheet"
+      ],
+      "milestones": [
+        "Import object descriptions, photos and intake identifiers",
+        "Compute text and image features independently",
+        "Rank candidate pairs and review conflicting evidence",
+        "Export match decisions with their source records"
+      ],
+      "references": [],
+      "distinctFrom": "Catalog Record Linker reconciles structured records; this teaches multimodal candidate matching with separate text and image evidence.",
+      "firstDemo": "Compare original photos of two similar bottles and one umbrella against authored descriptions and leave an ambiguous bottle unresolved.",
+      "originalFixture": "Original object-only photographs and fictional lost/found intake records"
+    },
+    {
+      "id": "presentation-rehearsal-coach",
+      "title": "Presentation Rehearsal Coach",
+      "level": 3,
+      "source": "core",
+      "status": "planned",
+      "track": "applications",
+      "languages": [
+        "Python"
+      ],
+      "tagline": "See which slide ideas your rehearsal actually covered.",
+      "summary": "Help a speaker improve a rehearsal by aligning supplied slide text and timed transcript segments. Compute explicit pacing and topic-coverage signals, show the source phrases behind suggested practice targets, and export a slide-by-slide HTML report with a reusable rehearsal comparison file.",
+      "output": "A slide-linked HTML rehearsal report, coverage.json and a comparison between two rehearsals",
+      "prerequisiteProjects": [
+        "voice-note-transcriber-pipeline",
+        "semantic-notes-search"
+      ],
+      "milestones": [
+        "Import slide text and timed rehearsal segments",
+        "Align spoken segments to candidate slides",
+        "Measure pacing and review apparent coverage gaps",
+        "Export a rehearsal report and compare a second attempt"
+      ],
+      "references": [],
+      "distinctFrom": "Meeting Notes to Actions extracts commitments; this aligns a speaker's delivery to planned visual material and supports deliberate rehearsal.",
+      "firstDemo": "Compare two original three-slide rehearsals and identify a skipped definition with its supporting transcript ranges.",
+      "originalFixture": "An original three-slide talk with two independently authored timed rehearsal transcripts"
+    },
+    {
+      "id": "semantic-cache-correctness-lab",
+      "title": "Semantic Cache Correctness Lab",
+      "level": 3,
+      "source": "core",
+      "status": "planned",
+      "track": "platform",
+      "languages": [
+        "Go",
+        "Python"
+      ],
+      "tagline": "Measure when a similar question can reuse an answer and when it must miss.",
+      "summary": "Build an opt-in answer cache that binds entries to tenant, model, source revision and expiry. Compare exact and semantic candidate matching using authored near-miss questions, including changed numbers and negation. Export a local HTTP adapter and a false-hit report; similarity alone must not authorize cross-user reuse.",
+      "output": "Local cache adapter and false-hit, latency and invalidation report",
+      "prerequisiteProjects": [
+        "semantic-notes-search",
+        "rag-freshness-pipeline"
+      ],
+      "milestones": [
+        "Define identity, freshness and privacy boundaries",
+        "Implement exact-match lookup and invalidation",
+        "Evaluate semantic candidates against adversarial pairs",
+        "Export a bounded HTTP adapter and reuse evidence"
+      ],
+      "references": [
+        "https://www.rfc-editor.org/rfc/rfc9111.html"
+      ],
+      "distinctFrom": "RAG Freshness Pipeline versions source content; this decides whether a prior answer can be reused for a new query under identity and freshness constraints.",
+      "firstDemo": "Show a cache hit for a paraphrase and a miss when the question changes a critical number or tenant."
+    },
+    {
+      "id": "tool-contract-migration-checker",
+      "title": "Tool Contract Migration Checker",
+      "level": 3,
+      "source": "core",
+      "status": "planned",
+      "track": "systems",
+      "languages": [
+        "TypeScript",
+        "Python"
+      ],
+      "tagline": "Find the saved tool calls that a proposed schema change would break.",
+      "summary": "Help tool authors evolve a callable interface while existing agents still hold old argument shapes. Compare a documented subset of before-and-after schemas, generate counterexamples for required fields and narrowed values, and replay saved calls through both validators. Export a compatibility report and reviewable migration fixtures for CI.",
+      "output": "Schema compatibility CLI, breaking-call fixtures and CI report",
+      "prerequisiteProjects": [
+        "json-schema-output-guard"
+      ],
+      "milestones": [
+        "Load versioned tool contracts and saved calls",
+        "Classify supported schema changes",
+        "Generate and replay breaking-call counterexamples",
+        "Export migration fixtures and a compatibility gate"
+      ],
+      "references": [],
+      "distinctFrom": "JSON Schema Output Guard validates one payload; this project reasons about compatibility between two tool contracts and supplies concrete calls that change validity. It does not map package upgrades to source call sites.",
+      "firstDemo": "Add a required argument to a fictional catalog tool and generate a saved call that passes the old contract but fails the new one.",
+      "implementationBoundary": "Publish the supported schema subset and mark unhandled keywords unresolved instead of declaring full JSON Schema compatibility."
+    },
+    {
+      "id": "video-highlight-storyboard",
+      "title": "Video Highlight Storyboard",
+      "level": 3,
+      "source": "core",
+      "status": "planned",
+      "track": "applications",
+      "languages": [
+        "Python"
+      ],
+      "tagline": "Review a clip sequence before spending time editing video.",
+      "summary": "Help a tutorial creator assemble short excerpts from a supplied video, frame samples and timed transcript. Combine visible shot changes with transcript topic scores, preserve exact source time ranges, and export a playable storyboard and edit-decision JSON for a video editor.",
+      "output": "A timestamped HTML storyboard, selected thumbnails and edit-decisions.json",
+      "prerequisiteProjects": [
+        "voice-note-transcriber-pipeline",
+        "photo-burst-contact-sheet"
+      ],
+      "milestones": [
+        "Align video metadata, frame samples and transcript time",
+        "Generate shot and topic boundary candidates",
+        "Review clip selections under a duration budget",
+        "Export the storyboard and editor-facing time ranges"
+      ],
+      "references": [],
+      "distinctFrom": "Voice Note Transcriber Pipeline creates captions; this combines visual and transcript timing to select an editable video sequence.",
+      "firstDemo": "Select a concise introduction and demonstration from an original paper-folding tutorial without cutting a sentence midway.",
+      "originalFixture": "An original short recorded craft tutorial, its authored transcript and explicit frame timestamps"
+    },
+    {
+      "id": "a2a-task-handoff-workbench",
+      "title": "A2A Task Handoff Workbench",
+      "level": 4,
+      "source": "core",
+      "status": "planned",
+      "track": "systems",
+      "languages": [
+        "Python",
+        "TypeScript"
+      ],
+      "tagline": "Trace a task as two independently running agents exchange work and artifacts.",
+      "summary": "Help teams connect agents that expose different capabilities and task lifecycles. Read Agent Cards, choose a mutually supported binding, and run a handoff that includes a request for more input, cancellation and a final artifact. Export a local client-server pair and a replayable receipt showing every state transition and artifact owner.",
+      "output": "Two local agent endpoints, handoff client and task/artifact replay bundle",
+      "prerequisiteProjects": [
+        "typed-workflow-agent-with-mastra",
+        "agent-trace-debugger"
+      ],
+      "milestones": [
+        "Read Agent Cards and select supported interfaces",
+        "Create a task and preserve message identity",
+        "Handle input requests and cancellation",
+        "Exchange artifacts and replay the complete handoff"
+      ],
+      "references": [
+        "https://a2a-protocol.org/latest/specification/"
+      ],
+      "distinctFrom": "Multi-Agent Code Review Panel coordinates local reviewers for one purpose; this project tests task exchange between independent protocol participants.",
+      "firstDemo": "Have two local agents assemble an authored workshop brief, pause for one missing input and exchange the final artifact.",
+      "implementationBoundary": "Select and pin the A2A protocol revision, binding and SDK versions at implementation time. Verify their wire compatibility and capability declarations with real local endpoints before claiming support; optional extensions remain explicit."
+    },
+    {
+      "id": "abstention-calibration-workbench",
+      "title": "Abstention Calibration Workbench",
+      "level": 4,
+      "source": "core",
+      "status": "planned",
+      "track": "systems",
+      "languages": [
+        "Python"
+      ],
+      "tagline": "Choose when an assistant should defer using a measured error-versus-coverage tradeoff.",
+      "summary": "Help teams set a defensible accept-or-defer rule for a bounded task. Tune a score threshold on labeled development records under explicit error costs, freeze that policy, and evaluate held-out risk and coverage across slices. Export a decision-policy file and audit that shows how many requests need human review.",
+      "output": "Frozen accept/defer policy JSON, risk-coverage curves and held-out slice audit",
+      "prerequisiteProjects": [
+        "dataset-split-auditor",
+        "local-model-eval-harness"
+      ],
+      "milestones": [
+        "Validate separated development and holdout records",
+        "Tune thresholds under declared error costs",
+        "Freeze and evaluate the policy on holdout slices",
+        "Export a decision adapter and review-volume estimate"
+      ],
+      "references": [],
+      "distinctFrom": "Local Model Evaluation Harness reports model performance and calibration; this project turns scores into an operational defer policy with a separate threshold-selection phase.",
+      "firstDemo": "Tune a defer threshold on an authored development split, freeze it and reveal its different coverage on the held-out split.",
+      "implementationBoundary": "Input scores are not automatically probabilities. Report empirical results and uncertainty without promising a deployment-wide error bound from a small dataset."
+    },
+    {
+      "id": "artifact-provenance-gate",
+      "title": "Artifact Provenance Gate",
+      "level": 4,
+      "source": "core",
+      "status": "planned",
+      "track": "systems",
+      "languages": [
+        "Go",
+        "Python"
+      ],
+      "tagline": "Explain whether an artifact matches its signed build record and your trust policy.",
+      "summary": "Help a maintainer inspect a downloaded agent plugin or release artifact before integrating it. Verify the subject digest and attestation signature, evaluate declared builder and source identities against an explicit policy, and preserve the reason for every rejection. Export a CI gate with authored signed fixtures and a separately verified external-verifier adapter.",
+      "output": "Artifact verification CLI, trust-policy file and provenance decision JSON",
+      "prerequisiteProjects": [
+        "skill-installer",
+        "skill-validator"
+      ],
+      "milestones": [
+        "Bind artifact bytes to the attestation subject",
+        "Verify signatures against an explicit trust root",
+        "Evaluate builder and source-material policies",
+        "Export a CI gate with reproducible rejection fixtures"
+      ],
+      "references": [
+        "https://slsa.dev/spec/v1.2/provenance"
+      ],
+      "distinctFrom": "Cross-Agent Skill Installer writes a local skill package; this project checks artifact origin and build evidence before accepting a package or binary from an external build process.",
+      "firstDemo": "Verify an authored signed artifact, then change one byte and separately reject a signature from an untrusted builder.",
+      "implementationBoundary": "Pin the supported attestation formats and verifier versions. Provenance verification establishes particular origin claims, not content safety or automatic SLSA certification."
+    },
+    {
+      "id": "context-compaction-verifier",
+      "title": "Context Compaction Verifier",
+      "level": 4,
+      "source": "core",
+      "status": "planned",
+      "track": "systems",
+      "languages": [
+        "Python",
+        "Rust"
+      ],
+      "tagline": "Check which task constraints survive when an agent compresses its working context.",
+      "summary": "Help agent developers avoid losing a user constraint during a long session. Track explicit facts and constraints with source locators, create an extractive compressed context, and test candidate summaries against a declared retention contract. Export compaction middleware that keeps the prior snapshot when required evidence disappears.",
+      "output": "Compaction middleware, constraint-retention receipt and restorable context snapshots",
+      "prerequisiteProjects": [
+        "memory-server",
+        "token-counter-and-cost-meter"
+      ],
+      "milestones": [
+        "Build a source-linked fact and constraint ledger",
+        "Create a bounded extractive context snapshot",
+        "Check retention and authored contradiction cases",
+        "Commit or restore context with an audit receipt"
+      ],
+      "references": [],
+      "distinctFrom": "Persistent Memory Server stores persistent records; this project validates one active-session compression step against explicit constraints before replacing working context.",
+      "firstDemo": "Compress an authored session whose required output format is easy to omit and restore the previous snapshot when that constraint disappears.",
+      "implementationBoundary": "The baseline verifies explicit structured constraints and authored lexical relations. Optional model summaries require separate evaluation and do not turn these checks into general semantic-equivalence proof."
+    },
+    {
+      "id": "local-inference-capacity-planner",
+      "title": "Local Inference Capacity Planner",
+      "level": 4,
+      "source": "core",
+      "status": "planned",
+      "track": "platform",
+      "languages": [
+        "Python",
+        "Go"
+      ],
+      "tagline": "Measure how concurrency changes queueing, latency and successful local requests.",
+      "summary": "Help a team choose a concurrency limit for its own model endpoint. Replay an authored arrival schedule, record queue wait separately from service time, and compare observed percentiles and timeouts across bounded runs. Export a capacity curve and editable operating limit based on measured requests, not model-name lookup tables.",
+      "output": "Load-replay manifest, capacity curve and measured operating-limit receipt",
+      "prerequisiteProjects": [
+        "local-model-eval-harness",
+        "agent-budget-planner"
+      ],
+      "milestones": [
+        "Define an arrival schedule and resource limits",
+        "Measure queue and service time independently",
+        "Compare concurrency settings on the same workload",
+        "Export a reproducible capacity decision"
+      ],
+      "references": [],
+      "distinctFrom": "Local Model Evaluation Harness scores outputs; this measures queue behavior under controlled arrival schedules and concurrency.",
+      "firstDemo": "Replay the same authored arrivals at three concurrency limits and compare queue wait with service latency."
+    },
+    {
+      "id": "mcp-protocol-compatibility-doctor",
+      "title": "MCP Compatibility Doctor",
+      "level": 4,
+      "source": "core",
+      "status": "planned",
+      "track": "systems",
+      "languages": [
+        "TypeScript",
+        "Python"
+      ],
+      "tagline": "Find the first protocol disagreement between an MCP client and server.",
+      "summary": "Help an integration author diagnose a client that connects but cannot use a server correctly. Run authored negotiation, request-correlation and capability probes through a bounded transport adapter. Export a compatibility matrix and the smallest wire transcript that explains a failure, with credentials removed.",
+      "output": "Protocol probe CLI, compatibility JSON and redacted reproduction transcript",
+      "prerequisiteProjects": [
+        "mcp-at-scale",
+        "agent-trace-debugger"
+      ],
+      "milestones": [
+        "Record initialization and negotiated capabilities",
+        "Probe supported operations and request correlation",
+        "Reduce a failing exchange to its required messages",
+        "Export a client-server compatibility receipt"
+      ],
+      "references": [
+        "https://modelcontextprotocol.io/specification/2025-11-25/basic/lifecycle"
+      ],
+      "distinctFrom": "MCP Tool Discovery Workbench teaches serving and discovering a tool inventory; this project diagnoses disagreements between independently implemented clients and servers.",
+      "firstDemo": "Connect two authored local participants whose declared capabilities disagree and export the first failing exchange.",
+      "implementationBoundary": "Pin the selected MCP specification revision and transport during implementation; validate probes against that revision and report unsupported capabilities explicitly. Planned probes are not a universal conformance certification."
+    },
+    {
+      "id": "metamorphic-evaluation-workbench",
+      "title": "Metamorphic Evaluation Workbench",
+      "level": 4,
+      "source": "core",
+      "status": "planned",
+      "track": "systems",
+      "languages": [
+        "Python",
+        "TypeScript"
+      ],
+      "tagline": "Test relationships between answers when a single golden answer is not enough.",
+      "summary": "Help evaluators catch inconsistent behavior across related inputs. Author transformations such as unit conversion, record reordering and equivalent formatting, define the output relationship each should preserve, and shrink violating examples. Export a property-based evaluation runner and small failure bundles that can be consumed by CI.",
+      "output": "Transformation/property runner, minimized counterexample JSON and CI results",
+      "prerequisiteProjects": [
+        "prompt-regression-tester",
+        "json-schema-output-guard"
+      ],
+      "milestones": [
+        "Define input transformations and expected relations",
+        "Run paired cases with recorded response provenance",
+        "Check relations and shrink violations",
+        "Export reproducible property failures for CI"
+      ],
+      "references": [],
+      "distinctFrom": "Prompt Regression Tester compares known cases across prompt revisions; this project generates related inputs and checks domain invariants between their outputs.",
+      "firstDemo": "Reorder an authored table, change equivalent unit notation and isolate the transformation that violates the answer contract.",
+      "implementationBoundary": "Relations are authored assumptions about a particular task. Passing them does not establish general model quality, and stochastic adapters must retain repeated-run evidence."
+    },
+    {
+      "id": "oauth-resource-boundary-lab",
+      "title": "OAuth Resource Boundary Lab",
+      "level": 4,
+      "source": "core",
+      "status": "planned",
+      "track": "systems",
+      "languages": [
+        "Go",
+        "TypeScript"
+      ],
+      "tagline": "Show why a valid token can still be wrong for the requested resource.",
+      "summary": "Help developers integrate delegated authorization without accepting a token intended for another service. Build local authorization and resource fixtures, follow metadata discovery, bind authorization to the requested resource, and check audience and scope at the server. Export reusable validation middleware and a redacted explanation of rejected requests.",
+      "output": "Local authorization fixture, resource-server middleware and authorization decision transcript",
+      "prerequisiteProjects": [
+        "mcp-at-scale",
+        "tool-call-firewall"
+      ],
+      "milestones": [
+        "Model the client, issuer and resource identities",
+        "Discover metadata and bind a proof-key authorization flow",
+        "Reject wrong audiences and insufficient scopes",
+        "Integrate middleware and export redacted decisions"
+      ],
+      "references": [
+        "https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization",
+        "https://www.rfc-editor.org/info/rfc8707/"
+      ],
+      "distinctFrom": "Tool Call Firewall checks a proposed tool action; this project establishes which resource and permissions a delegated credential actually authorizes.",
+      "firstDemo": "Use a locally issued token against two fictional resources and explain why the second resource rejects it.",
+      "implementationBoundary": "Pin the MCP authorization revision and underlying OAuth requirements before coding. Use a local issuer by default and verify any external identity-provider adapter separately; do not describe OAuth 2.1 draft material as a finalized RFC."
+    },
+    {
+      "id": "outbound-request-policy-proxy",
+      "title": "Outbound Request Policy Proxy",
+      "level": 4,
+      "source": "core",
+      "status": "planned",
+      "track": "systems",
+      "languages": [
+        "Go"
+      ],
+      "tagline": "Explain every destination decision before an agent's HTTP request leaves the process.",
+      "summary": "Help developers constrain a fetch tool that follows URLs supplied by untrusted documents. Evaluate the scheme, host, resolved address and each redirect, then connect using the validated destination under explicit size and time limits. Export a local egress adapter and loopback cases that reveal redirect and address-policy mistakes.",
+      "output": "Policy-aware HTTP adapter, destination decision receipts and adversarial local fixtures",
+      "prerequisiteProjects": [
+        "llm-gateway-with-fallbacks",
+        "tool-call-firewall"
+      ],
+      "milestones": [
+        "Parse destinations and define address policies",
+        "Bind resolution decisions to actual connections",
+        "Revalidate redirects and bound responses",
+        "Export an adapter and replay denied requests"
+      ],
+      "references": [],
+      "distinctFrom": "LLM Gateway With Fallbacks selects configured providers; this project constrains network destinations for arbitrary URL-fetch operations, including redirect transitions.",
+      "firstDemo": "Follow an authored local redirect chain whose final destination violates the declared address policy and inspect the blocked hop.",
+      "implementationBoundary": "Document the supported DNS, proxy and network assumptions. A process-level adapter is not an operating-system sandbox or a guarantee about traffic that bypasses it."
+    },
+    {
+      "id": "release-canary-decision-lab",
+      "title": "Release Canary Decision Lab",
+      "level": 4,
+      "source": "core",
+      "status": "planned",
+      "track": "systems",
+      "languages": [
+        "Python",
+        "Go"
+      ],
+      "tagline": "Make a candidate release earn more traffic through visible evidence and stopping rules.",
+      "summary": "Help a team decide whether an agent behavior change is ready for wider exposure. Assign stable request cohorts, compare candidate and baseline error and latency windows, and distinguish insufficient evidence from a failed gate. Export replayable decision receipts and a local shadow adapter that exercises the policy without deploying anything.",
+      "output": "Canary policy runner, local shadow adapter and stop/continue/insufficient-evidence receipts",
+      "prerequisiteProjects": [
+        "harness-bench",
+        "agent-trace-debugger"
+      ],
+      "milestones": [
+        "Assign stable cohorts and define release signals",
+        "Accumulate comparable baseline and candidate windows",
+        "Apply minimum-sample and stopping rules",
+        "Replay decisions through a local shadow adapter"
+      ],
+      "references": [],
+      "distinctFrom": "Harness Bench compares policies on a fixed dataset; this project studies sequential release decisions, cohort assignment and evidence accumulated over time.",
+      "firstDemo": "Replay authored baseline and candidate requests through windows that first lack evidence and then trigger an explicit stop decision.",
+      "implementationBoundary": "Export recommendations only. State the chosen statistical assumptions and do not interpret a small passing window as universal release safety."
+    },
+    {
+      "id": "secret-injection-sidecar",
+      "title": "Secret Injection Sidecar",
+      "level": 4,
+      "source": "core",
+      "status": "planned",
+      "track": "systems",
+      "languages": [
+        "Rust",
+        "Python"
+      ],
+      "tagline": "Let an agent request an authenticated operation using an opaque credential handle.",
+      "summary": "Help developers keep service credentials out of model-visible tool arguments and routine traces. Build a local broker that resolves opaque handles, binds each handle to a destination and operation, and inserts environment-supplied credentials at the network boundary. Test echoed credential markers and export decision receipts with bounded response filtering.",
+      "output": "Local credential broker, handle-based client adapter and redacted request receipts",
+      "prerequisiteProjects": [
+        "tool-call-firewall",
+        "rust-agent-shell"
+      ],
+      "milestones": [
+        "Define opaque handles and destination-bound grants",
+        "Inject credentials inside the broker boundary",
+        "Exercise response and trace redaction fixtures",
+        "Integrate a client using handles alone"
+      ],
+      "references": [],
+      "distinctFrom": "Tool Call Firewall authorizes actions, while this project removes raw credentials from the agent-facing interface and tests the broker's observable boundaries.",
+      "firstDemo": "Call a local fixture using an opaque handle and demonstrate that its exact echoed credential marker is absent from the returned trace.",
+      "implementationBoundary": "Use environment secrets and loopback test services. Exact-marker filtering demonstrates a bounded property and cannot guarantee that an arbitrary upstream service never leaks a transformed secret."
+    },
+    {
+      "id": "tenant-fairness-scheduler",
+      "title": "Tenant Fairness Scheduler",
+      "level": 4,
+      "source": "core",
+      "status": "planned",
+      "track": "systems",
+      "languages": [
+        "Rust",
+        "Python"
+      ],
+      "tagline": "Keep one busy tenant from consuming the entire agent execution queue.",
+      "summary": "Help platform developers share a finite worker pool across tenants with different job sizes. Implement weighted deficit scheduling, bounded admission and aging, then compare per-tenant wait distributions under authored bursts. Export a queue adapter and workload receipts that make starvation and unused capacity visible.",
+      "output": "Fair queue adapter, workload replay CLI and per-tenant wait/throughput report",
+      "prerequisiteProjects": [
+        "durable-agent-jobs",
+        "agent-budget-planner"
+      ],
+      "milestones": [
+        "Represent tenant queues and declared job costs",
+        "Implement weighted deficit scheduling",
+        "Bound admission and detect starvation",
+        "Compare fairness on replayed burst workloads"
+      ],
+      "references": [],
+      "distinctFrom": "Agent Budget Planner accounts for caller-supplied usage and deadlines; this project decides which tenant receives the next shared execution slot and measures fairness.",
+      "firstDemo": "Replay a burst from one fictional tenant while a second submits small jobs, then compare their waits under two queue policies.",
+      "implementationBoundary": "Define fairness against declared or measured service units and expose errors in cost estimates. The local adapter does not claim distributed consensus."
+    },
+    {
+      "id": "agent-resource-deadlock-lab",
+      "title": "Agent Resource Deadlock Lab",
+      "level": 5,
+      "source": "core",
+      "status": "planned",
+      "track": "systems",
+      "languages": [
+        "Rust",
+        "TypeScript"
+      ],
+      "tagline": "Replay the exact resource-acquisition order that leaves cooperating agents stuck.",
+      "summary": "Help developers coordinate agents that need several exclusive resources, such as a browser session and a workspace. Build wait-for graphs, explore bounded schedules, and compare ordered acquisition with timeout-and-release policies. Export deadlock traces and a resource-coordinator adapter with explicit acquisition receipts.",
+      "output": "Bounded schedule explorer, deadlock replay traces and resource-coordinator adapter",
+      "prerequisiteProjects": [
+        "durable-agent-jobs",
+        "multi-agent-code-review-panel"
+      ],
+      "milestones": [
+        "Model resource ownership and wait-for edges",
+        "Explore bounded interleavings and detect cycles",
+        "Compare ordering and timeout-release policies",
+        "Export a coordinator and replayable deadlock evidence"
+      ],
+      "references": [],
+      "distinctFrom": "Durable Agent Jobs coordinates queue leases; this project studies circular wait when tasks hold multiple scarce resources while requesting others.",
+      "firstDemo": "Replay two local agents acquiring a browser and workspace in opposite order, then demonstrate a schedule that completes.",
+      "implementationBoundary": "A bounded explorer proves only the schedules it actually examines. Define resource semantics explicitly and distinguish deadlock from slow work, starvation and crashed ownership."
+    },
+    {
+      "id": "judge-bias-calibration-lab",
+      "title": "Judge Bias Calibration Lab",
+      "level": 5,
+      "source": "core",
+      "status": "planned",
+      "track": "systems",
+      "languages": [
+        "Python",
+        "TypeScript"
+      ],
+      "tagline": "Find when a judge prefers answer position or length over the evidence in its rubric.",
+      "summary": "Help evaluators decide whether an automated pairwise judge is useful for their task. Blind candidate identities, swap answer positions, run authored length counterfactuals and compare decisions with held-out human anchors. Export disagreement and bias breakdowns plus a versioned rubric and judge configuration receipt.",
+      "output": "Pairwise judging runner, bias scorecard and versioned rubric/configuration bundle",
+      "prerequisiteProjects": [
+        "report-judge",
+        "dataset-split-auditor",
+        "local-model-eval-harness"
+      ],
+      "milestones": [
+        "Create blinded pairs and separated human anchors",
+        "Run position swaps and length counterfactuals",
+        "Measure disagreement and slice-specific bias",
+        "Export a rubric with held-out validation evidence"
+      ],
+      "references": [],
+      "distinctFrom": "Report Judge checks report evidence and citation support; this project evaluates the reliability and biases of the evaluator itself.",
+      "firstDemo": "Swap the positions of two authored answers and expose a recorded judge that changes preference without new evidence.",
+      "implementationBoundary": "Recorded judge responses form the offline baseline. Any live model judge must retain its model/configuration receipt, and calibration findings apply only to the tested task distribution."
+    },
+    {
+      "id": "trajectory-counterexample-minimizer",
+      "title": "Trajectory Counterexample Minimizer",
+      "level": 5,
+      "source": "core",
+      "status": "planned",
+      "track": "systems",
+      "languages": [
+        "Rust",
+        "Python"
+      ],
+      "tagline": "Reduce a long agent run to the smallest event sequence that still breaks a rule.",
+      "summary": "Help agent developers diagnose failures that depend on action order. Express bounded temporal rules such as approval preceding an effect, check event traces, and remove irrelevant events while preserving declared causal dependencies. Export a minimal replay bundle with the violated rule and exact event identities.",
+      "output": "Temporal trace checker, dependency-preserving reducer and minimal replay bundle",
+      "prerequisiteProjects": [
+        "agent-trace-debugger",
+        "tool-call-firewall"
+      ],
+      "milestones": [
+        "Normalize events and declared causal dependencies",
+        "Check bounded temporal rules",
+        "Minimize failures without breaking prerequisites",
+        "Export the smallest reproducible violation"
+      ],
+      "references": [],
+      "distinctFrom": "Agent Trace Debugger explains execution timing; this project checks event-order properties and automatically reduces a failing trajectory.",
+      "firstDemo": "Reduce a twenty-event authored run to the approval and effect events that reproduce a stale-approval violation.",
+      "implementationBoundary": "Causal preservation depends on recorded dependencies and the supported rule language. A minimal trace is relative to the chosen reducer and replay oracle, not a proof of global minimality."
+    },
+    {
+      "id": "transactional-workspace-patch-broker",
+      "title": "Transactional Workspace Patch Broker",
+      "level": 5,
+      "source": "core",
+      "status": "planned",
+      "track": "systems",
+      "languages": [
+        "Rust",
+        "TypeScript"
+      ],
+      "tagline": "Publish a coordinated set of agent edits only when its input revision still matches.",
+      "summary": "Help concurrent coding agents avoid overwriting each other's files halfway through a multi-file change. Bind a patch bundle to content hashes, apply it to a private versioned workspace, run declared checks, and publish by switching one workspace pointer. Export a transaction API with conflict evidence and an explicit rollback journal.",
+      "output": "Workspace transaction API, reviewable patch bundle and conflict/rollback journal",
+      "prerequisiteProjects": [
+        "tiny-coding-agent",
+        "sandbox-ladder"
+      ],
+      "milestones": [
+        "Bind a multi-file patch to its input revision",
+        "Stage edits in a private versioned workspace",
+        "Reject conflicts and run declared validation",
+        "Publish a workspace pointer and record rollback"
+      ],
+      "references": [],
+      "distinctFrom": "Tiny Coding Agent teaches a coding loop; this project makes publication and conflicts explicit when several agents produce overlapping multi-file changes.",
+      "firstDemo": "Let two local workers propose overlapping edits and show one complete publication alongside the other worker's revision conflict.",
+      "implementationBoundary": "Atomicity applies to the versioned workspace pointer and readers that honor it. Do not claim arbitrary multi-file writes into an existing checkout are atomic."
+    }
+  ]
+}

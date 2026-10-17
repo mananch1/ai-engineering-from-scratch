@@ -16,7 +16,7 @@
 
 ## The Problem
 
-A naive allreduce over N ranks sends N times the tensor to a root and broadcasts N times back. Bandwidth scales as O(N) per rank, the root becomes a bottleneck, and the wall-clock floor is the slowest link times N. Ring allreduce flattens that into 2(N-1) chunks of size T/N, so per-rank bytes drop to 2T(N-1)/N independent of cluster size. Tree allreduce wins on small N and high-latency links because depth is log2(N) hops instead of 2(N-1). Pick the wrong topology for the cluster shape and the slowest GPU dictates step time.
+A naive allreduce over N ranks sends N times the tensor to a root and broadcasts N times back. Bandwidth scales as $O(N)$ per rank, the root becomes a bottleneck, and the wall-clock floor is the slowest link times N. Ring allreduce flattens that into $2(N-1)$ chunks of size $T/N$, so per-rank bytes drop to $2T(N-1)/N$ independent of cluster size. Tree allreduce wins on small N and high-latency links because depth is $\log_2(N)$ hops instead of $2(N-1)$. Pick the wrong topology for the cluster shape and the slowest GPU dictates step time.
 
 Every distributed training framework you will read this track depends on these four primitives. PyTorch DDP synchronises gradients with one allreduce per parameter bucket. ZeRO shards optimiser state by reduce_scatter and broadcasts updated parameters by allgather. FSDP turns the full forward into allgather plus reduce_scatter. Pipeline parallel needs broadcast for activations across stage groups. If you cannot implement the four collectives, you cannot reason about why training stalls, why the gradient mismatch shows up at rank 3, or why the pipeline bubble doubles when you swap topologies.
 

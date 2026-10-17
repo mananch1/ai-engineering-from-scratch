@@ -62,9 +62,9 @@ Implemented as a block-triangular mask at training and inference.
 The diffusion loss is standard: add noise to an image patch, ask the model to predict the noise (or the clean patch, equivalently). Transfusion's version uses flow matching — predict the velocity field from noisy to clean.
 
 During training:
-1. For each image patch x0, sample a random timestep t.
-2. Sample noise ε, compute xt = (1-t) * x0 + t * ε (linear interpolation for flow matching).
-3. The transformer predicts v_theta(xt, t); loss = MSE(v_theta(xt, t), ε - x0).
+1. For each image patch $x_0$, sample a random timestep $t$.
+2. Sample noise $\epsilon$, compute $x_t = (1-t) \cdot x_0 + t \cdot \epsilon$ (linear interpolation for flow matching).
+3. The transformer predicts $v_\theta(x_t, t)$; $\text{loss} = \mathop{\mathrm{MSE}}(v_\theta(x_t, t), \epsilon - x_0)$.
 4. Backprop alongside text NTP losses from the same sequence.
 
 At inference, generation is:

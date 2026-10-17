@@ -317,7 +317,7 @@
   function escHtml(str) {
     var d = document.createElement('div');
     d.textContent = (str == null) ? '' : String(str);
-    return d.innerHTML;
+    return d.innerHTML.replace(/"/g, '&quot;');
   }
 
   /**
@@ -349,6 +349,14 @@
       '<mark>' + escHtml(text.slice(idx, idx + matchLen)) + '</mark>' +
       escHtml(text.slice(idx + matchLen))
     );
+  }
+
+  function formatCount(value) {
+    return (Number(value) || 0).toLocaleString('en');
+  }
+
+  function countLabel(value, singular, plural) {
+    return formatCount(value) + ' ' + (Number(value) === 1 ? singular : plural);
   }
 
   function truncate(str, max) {
@@ -508,15 +516,15 @@
       var learningPathCount = inventory.filter(function (item) { return item.kind === 'learning-path'; }).length;
       var artifactCount = inventory.filter(function (item) { return item.kind === 'artifact'; }).length;
       var glossaryCount = inventory.filter(function (item) { return item.kind === 'glossary'; }).length;
-      var inventoryParts = [lessonCount + ' lessons'];
+      var inventoryParts = [countLabel(lessonCount, 'lesson', 'lessons')];
       if (learningPathCount) {
-        inventoryParts.push(learningPathCount + ' focused learning ' + (learningPathCount === 1 ? 'path' : 'paths'));
+        inventoryParts.push(countLabel(learningPathCount, 'focused learning path', 'focused learning paths'));
       }
       if (certificationLessonCount) {
-        inventoryParts.push(certificationLessonCount + ' certification lessons');
+        inventoryParts.push(countLabel(certificationLessonCount, 'certification lesson', 'certification lessons'));
       }
-      inventoryParts.push(artifactCount + ' outputs');
-      inventoryParts.push(glossaryCount + ' glossary terms');
+      inventoryParts.push(countLabel(artifactCount, 'output', 'outputs'));
+      inventoryParts.push(countLabel(glossaryCount, 'glossary term', 'glossary terms'));
       list.innerHTML =
         '<li class="cp-empty" role="option" aria-disabled="true">' +
         'Search ' + inventoryParts.slice(0, -1).join(', ') + ', and ' +
@@ -583,7 +591,7 @@
       var snippet = r.summary ? truncate(r.summary, 110) : '';
       var metaParts = [];
       if (r.kind === 'learning-path') {
-        if (r.lessonCount) metaParts.push(r.lessonCount + ' lessons');
+        if (r.lessonCount) metaParts.push(countLabel(r.lessonCount, 'lesson', 'lessons'));
         if (r.minutes) {
           var hours = Math.floor(r.minutes / 60);
           var minutes = r.minutes % 60;
@@ -607,8 +615,8 @@
         ' data-href="' + escHtml(dest) + '">' +
           '<div class="cp-item-body">' +
             '<span class="' + chipClass + '">' + escHtml(chip) + '</span>' +
-            '<span class="cp-item-name">'    + highlight(r.name,    query) + '</span>' +
-            (snippet ? '<span class="cp-item-summary">' + highlight(snippet, query) + '</span>' : '') +
+            '<span class="cp-item-name" dir="auto" title="' + escHtml(r.name) + '">' + highlight(r.name, query) + '</span>' +
+            (snippet ? '<span class="cp-item-summary" dir="auto">' + highlight(snippet, query) + '</span>' : '') +
             (meta    ? '<span class="cp-item-meta">'    + escHtml(meta)             + '</span>' : '') +
           '</div>' +
           '<svg class="cp-item-arrow" width="12" height="12" viewBox="0 0 24 24"' +

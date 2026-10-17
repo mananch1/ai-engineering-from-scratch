@@ -24,10 +24,10 @@ Ensemble methods do exactly this. They are the most reliable technique for winni
 
 ### Why Ensembles Work
 
-Suppose you have N independent classifiers, each with accuracy p > 0.5. The majority vote has accuracy:
+Suppose you have $N$ independent classifiers, each with accuracy $p > 0.5$. The majority vote has accuracy:
 
-```
-P(majority correct) = sum over k > N/2 of C(N,k) * p^k * (1-p)^(N-k)
+```math
+P(\text{majority correct}) = \sum_{k > N/2} \binom{N}{k} p^k (1-p)^{N-k}
 ```
 
 For 21 classifiers each with 60% accuracy, majority vote accuracy is about 74%. With 101 classifiers, it rises to 84%. The errors cancel out when the models make different mistakes.
@@ -132,7 +132,7 @@ Gradient boosting generalizes boosting to arbitrary loss functions. Instead of r
 3. Final prediction: F_T(x)
 ```
 
-For squared error loss, the pseudo-residuals are just the actual residuals: `r_i = y_i - F_{t-1}(x_i)`. Each tree literally fits the errors of the previous ensemble.
+For squared error loss, the pseudo-residuals are just the actual residuals: $r_i = y_i - F_{t-1}(x_i)$. Each tree literally fits the errors of the previous ensemble.
 
 The learning rate (shrinkage) controls how much each tree contributes. Smaller learning rates require more trees but generalize better. Typical values: 0.01 to 0.3.
 
@@ -349,7 +349,7 @@ This lesson produces `outputs/prompt-ensemble-selector.md` -- a prompt that help
 ## Further Reading
 
 - [Schapire & Freund: Boosting: Foundations and Algorithms](https://mitpress.mit.edu/9780262526036/) -- the book by AdaBoost's creators
-- [Friedman: Greedy Function Approximation: A Gradient Boosting Machine (2001)](https://statweb.stanford.edu/~jhf/ftp/trebst.pdf) -- the original gradient boosting paper
+- [Friedman: Greedy Function Approximation: A Gradient Boosting Machine (2001)](https://doi.org/10.1214/aos/1013203451) -- the original gradient boosting paper
 - [Chen & Guestrin: XGBoost (2016)](https://arxiv.org/abs/1603.02754) -- the XGBoost paper
 - [Wolpert: Stacked Generalization (1992)](https://www.sciencedirect.com/science/article/abs/pii/S0893608005800231) -- the original stacking paper
 - [scikit-learn Ensemble Methods](https://scikit-learn.org/stable/modules/ensemble.html) -- practical reference

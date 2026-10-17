@@ -36,7 +36,7 @@ Why it matters in 2026:
 **Architectures.**
 
 1. **Rule-based (Hobbs, 1978).** Syntactic-tree-based pronoun resolution using grammar rules. Good baseline. Surprisingly hard to beat on pronouns.
-2. **Mention-pair classifier.** For every pair of mentions (m_i, m_j), predict whether they corefer. Cluster by transitive closure. Standard pre-2016.
+2. **Mention-pair classifier.** For every pair of mentions $(m_i, m_j)$, predict whether they corefer. Cluster by transitive closure. Standard pre-2016.
 3. **Mention-ranking.** For each mention, rank candidate antecedents (including "no antecedent"). Pick the top.
 4. **Span-based end-to-end (Lee et al., 2017).** Transformer encoder. Enumerate all candidate spans up to a length cap. Predict mention scores. Predict antecedent-probability for each span. Cluster greedily. The modern default.
 5. **Generative (2024+).** Prompt an LLM: "List every pronoun in this text and its antecedent." Works well on easy cases, struggles on long documents and rare referents.

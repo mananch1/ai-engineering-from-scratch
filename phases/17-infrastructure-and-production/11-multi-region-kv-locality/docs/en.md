@@ -30,7 +30,7 @@ Multi-region LLM serving is a cache problem, a routing problem, and a DR-hygiene
 
 Request arrives with a prompt. Router hashes the prefix (say, first 512 tokens); it asks each replica "do you have this prefix cached?". Replicas publish KV-cache events on a pub/sub channel as they allocate and evict blocks. Router picks the replica with the match, falls through to GPU-util-based tie-breaker if no one does.
 
-**vLLM Router** (Rust, 2026 production-stack): subscribes to `kv.cache.block_added` events, maintains a prefix-hash → replica index, routes with O(1) lookup. Falls through to least-queue-depth when no match.
+**vLLM Router** (Rust, 2026 production-stack): subscribes to `kv.cache.block_added` events, maintains a prefix-hash → replica index, routes with $O(1)$ lookup. Falls through to least-queue-depth when no match.
 
 **llm-d router**: same pattern, Kubernetes-native. Publishes events via the ControlPlane API.
 

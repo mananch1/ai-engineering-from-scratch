@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 330" role="img" aria-labelledby="fig-2-4-title fig-2-4-desc" font-family="JetBrains Mono, ui-monospace, monospace">
+  <title id="fig-2-4-title">Declared effects by provider in the capture</title>
+  <desc id="fig-2-4-desc">A table with four columns, ghidra with 29 operations available, hopper with 37 operations unavailable, ida with 13 operations unavailable, and 19 target-free operations with no provider binding, and seven rows, one per effect flag. launches_process is true for 29 of 29 ghidra operations, 37 of 37 hopper operations, no ida operation, and 12 of 19 target-free operations. may_write_filesystem is true for 29 of 29, 6 of 37, 0, and 6 of 19. may_show_ui is true for 0, 37 of 37, 4 of 13, and 2 of 19. may_access_network is true for 0, 0, 13 of 13, and 2 of 19. mutates_artifact is true for 3 of 29, 6 of 37, 0, and 0. changes_permissions and requires_root are false everywhere.</desc>
+  <text x="20" y="18" font-size="11" letter-spacing="1.2" fill="var(--m-ink-mute, #6f6f6a)">EFFECT FLAG</text>
+  <rect x="172" y="26" width="106" height="56" fill="var(--m-violet-fill, #ebe8f5)" stroke="var(--m-violet-ink, #5b4fa3)"/>
+  <text x="225" y="41.6" font-size="12" text-anchor="middle" font-weight="700">ghidra</text>
+  <text x="225" y="58.8" font-size="11" text-anchor="middle" class="m-serif" fill="var(--m-ink-soft, #4a4a4a)">29 operations</text>
+  <text x="225" y="73.8" font-size="11" text-anchor="middle" class="m-serif" fill="var(--m-ink-soft, #4a4a4a)">available</text>
+  <rect x="284" y="26" width="106" height="56" fill="var(--m-grey-fill, #ecebe3)" stroke="var(--m-grey-ink, #5e5e59)"/>
+  <text x="337" y="41.6" font-size="12" text-anchor="middle" font-weight="700">hopper</text>
+  <text x="337" y="58.8" font-size="11" text-anchor="middle" class="m-serif" fill="var(--m-ink-soft, #4a4a4a)">37 operations</text>
+  <text x="337" y="73.8" font-size="11" text-anchor="middle" class="m-serif" fill="var(--m-ink-soft, #4a4a4a)">unavailable</text>
+  <rect x="396" y="26" width="106" height="56" fill="var(--m-grey-fill, #ecebe3)" stroke="var(--m-grey-ink, #5e5e59)"/>
+  <text x="449" y="41.6" font-size="12" text-anchor="middle" font-weight="700">ida</text>
+  <text x="449" y="58.8" font-size="11" text-anchor="middle" class="m-serif" fill="var(--m-ink-soft, #4a4a4a)">13 operations</text>
+  <text x="449" y="73.8" font-size="11" text-anchor="middle" class="m-serif" fill="var(--m-ink-soft, #4a4a4a)">unavailable</text>
+  <rect x="508" y="26" width="106" height="56" fill="var(--m-blue-fill, #e6edf6)" stroke="var(--m-blue-ink, #2f5d9a)"/>
+  <text x="561" y="41.6" font-size="12" text-anchor="middle" font-weight="700">target-free</text>
+  <text x="561" y="58.8" font-size="11" text-anchor="middle" class="m-serif" fill="var(--m-ink-soft, #4a4a4a)">19 operations</text>
+  <text x="561" y="73.8" font-size="11" text-anchor="middle" class="m-serif" fill="var(--m-ink-soft, #4a4a4a)">no binding</text>
+  <rect x="20" y="92" width="146" height="32" fill="var(--m-paper, #fafaf5)" stroke="var(--m-panel-edge, #e4e1d4)"/>
+  <text x="26" y="112" font-size="11">launches_process</text>
+  <rect x="172" y="92" width="106" height="32" fill="var(--m-violet-fill, #ebe8f5)" stroke="var(--m-panel-edge, #e4e1d4)"/>
+  <text x="225" y="112" font-size="12" text-anchor="middle">29 of 29</text>
+  <rect x="284" y="92" width="106" height="32" fill="var(--m-grey-fill, #ecebe3)" stroke="var(--m-panel-edge, #e4e1d4)"/>
+  <text x="337" y="112" font-size="12" text-anchor="middle">37 of 37</text>
+  <rect x="396" y="92" width="106" height="32" fill="var(--m-paper, #fafaf5)" stroke="var(--m-panel-edge, #e4e1d4)"/>
+  <text x="449" y="112" font-size="12" text-anchor="middle" fill="var(--m-ink-mute, #6f6f6a)">0</text>
+  <rect x="508" y="92" width="106" height="32" fill="var(--m-blue-fill, #e6edf6)" stroke="var(--m-panel-edge, #e4e1d4)"/>
+  <text x="561" y="112" font-size="12" text-anchor="middle">12 of 19</text>
+  <rect x="20" y="124" width="146" height="32" fill="var(--m-paper, #fafaf5)" stroke="var(--m-panel-edge, #e4e1d4)"/>
+  <text x="26" y="144" font-size="11">may_write_filesystem</text>
+  <rect x="172" y="124" width="106" height="32" fill="var(--m-violet-fill, #ebe8f5)" stroke="var(--m-panel-edge, #e4e1d4)"/>
+  <text x="225" y="144" font-size="12" text-anchor="middle">29 of 29</text>
+  <rect x="284" y="124" width="106" height="32" fill="var(--m-grey-fill, #ecebe3)" stroke="var(--m-panel-edge, #e4e1d4)"/>
+  <text x="337" y="144" font-size="12" text-anchor="middle">6 of 37</text>
+  <rect x="396" y="124" width="106" height="32" fill="var(--m-paper, #fafaf5)" stroke="var(--m-panel-edge, #e4e1d4)"/>
+  <text x="449" y="144" font-size="12" text-anchor="middle" fill="var(--m-ink-mute, #6f6f6a)">0</text>
+  <rect x="508" y="124" width="106" height="32" fill="var(--m-blue-fill, #e6edf6)" stroke="var(--m-panel-edge, #e4e1d4)"/>
+  <text x="561" y="144" font-size="12" text-anchor="middle">6 of 19</text>
+  <rect x="20" y="156" width="146" height="32" fill="var(--m-paper, #fafaf5)" stroke="var(--m-panel-edge, #e4e1d4)"/>
+  <text x="26" y="176" font-size="11">may_show_ui</text>
+  <rect x="172" y="156" width="106" height="32" fill="var(--m-paper, #fafaf5)" stroke="var(--m-panel-edge, #e4e1d4)"/>
+  <text x="225" y="176" font-size="12" text-anchor="middle" fill="var(--m-ink-mute, #6f6f6a)">0</text>
+  <rect x="284" y="156" width="106" height="32" fill="var(--m-grey-fill, #ecebe3)" stroke="var(--m-panel-edge, #e4e1d4)"/>
+  <text x="337" y="176" font-size="12" text-anchor="middle">37 of 37</text>
+  <rect x="396" y="156" width="106" height="32" fill="var(--m-grey-fill, #ecebe3)" stroke="var(--m-panel-edge, #e4e1d4)"/>
+  <text x="449" y="176" font-size="12" text-anchor="middle">4 of 13</text>
+  <rect x="508" y="156" width="106" height="32" fill="var(--m-blue-fill, #e6edf6)" stroke="var(--m-panel-edge, #e4e1d4)"/>
+  <text x="561" y="176" font-size="12" text-anchor="middle">2 of 19</text>
+  <rect x="20" y="188" width="146" height="32" fill="var(--m-paper, #fafaf5)" stroke="var(--m-panel-edge, #e4e1d4)"/>
+  <text x="26" y="208" font-size="11">may_access_network</text>
+  <rect x="172" y="188" width="106" height="32" fill="var(--m-paper, #fafaf5)" stroke="var(--m-panel-edge, #e4e1d4)"/>
+  <text x="225" y="208" font-size="12" text-anchor="middle" fill="var(--m-ink-mute, #6f6f6a)">0</text>
+  <rect x="284" y="188" width="106" height="32" fill="var(--m-paper, #fafaf5)" stroke="var(--m-panel-edge, #e4e1d4)"/>
+  <text x="337" y="208" font-size="12" text-anchor="middle" fill="var(--m-ink-mute, #6f6f6a)">0</text>
+  <rect x="396" y="188" width="106" height="32" fill="var(--m-grey-fill, #ecebe3)" stroke="var(--m-panel-edge, #e4e1d4)"/>
+  <text x="449" y="208" font-size="12" text-anchor="middle">13 of 13</text>
+  <rect x="508" y="188" width="106" height="32" fill="var(--m-blue-fill, #e6edf6)" stroke="var(--m-panel-edge, #e4e1d4)"/>
+  <text x="561" y="208" font-size="12" text-anchor="middle">2 of 19</text>
+  <rect x="20" y="220" width="146" height="32" fill="var(--m-paper, #fafaf5)" stroke="var(--m-panel-edge, #e4e1d4)"/>
+  <text x="26" y="240" font-size="11">mutates_artifact</text>
+  <rect x="172" y="220" width="106" height="32" fill="var(--m-violet-fill, #ebe8f5)" stroke="var(--m-panel-edge, #e4e1d4)"/>
+  <text x="225" y="240" font-size="12" text-anchor="middle">3 of 29</text>
+  <rect x="284" y="220" width="106" height="32" fill="var(--m-grey-fill, #ecebe3)" stroke="var(--m-panel-edge, #e4e1d4)"/>
+  <text x="337" y="240" font-size="12" text-anchor="middle">6 of 37</text>
+  <rect x="396" y="220" width="106" height="32" fill="var(--m-paper, #fafaf5)" stroke="var(--m-panel-edge, #e4e1d4)"/>
+  <text x="449" y="240" font-size="12" text-anchor="middle" fill="var(--m-ink-mute, #6f6f6a)">0</text>
+  <rect x="508" y="220" width="106" height="32" fill="var(--m-paper, #fafaf5)" stroke="var(--m-panel-edge, #e4e1d4)"/>
+  <text x="561" y="240" font-size="12" text-anchor="middle" fill="var(--m-ink-mute, #6f6f6a)">0</text>
+  <rect x="20" y="252" width="146" height="32" fill="var(--m-paper, #fafaf5)" stroke="var(--m-panel-edge, #e4e1d4)"/>
+  <text x="26" y="272" font-size="11">changes_permissions</text>
+  <rect x="172" y="252" width="106" height="32" fill="var(--m-paper, #fafaf5)" stroke="var(--m-panel-edge, #e4e1d4)"/>
+  <text x="225" y="272" font-size="12" text-anchor="middle" fill="var(--m-ink-mute, #6f6f6a)">0</text>
+  <rect x="284" y="252" width="106" height="32" fill="var(--m-paper, #fafaf5)" stroke="var(--m-panel-edge, #e4e1d4)"/>
+  <text x="337" y="272" font-size="12" text-anchor="middle" fill="var(--m-ink-mute, #6f6f6a)">0</text>
+  <rect x="396" y="252" width="106" height="32" fill="var(--m-paper, #fafaf5)" stroke="var(--m-panel-edge, #e4e1d4)"/>
+  <text x="449" y="272" font-size="12" text-anchor="middle" fill="var(--m-ink-mute, #6f6f6a)">0</text>
+  <rect x="508" y="252" width="106" height="32" fill="var(--m-paper, #fafaf5)" stroke="var(--m-panel-edge, #e4e1d4)"/>
+  <text x="561" y="272" font-size="12" text-anchor="middle" fill="var(--m-ink-mute, #6f6f6a)">0</text>
+  <rect x="20" y="284" width="146" height="32" fill="var(--m-paper, #fafaf5)" stroke="var(--m-panel-edge, #e4e1d4)"/>
+  <text x="26" y="304" font-size="11">requires_root</text>
+  <rect x="172" y="284" width="106" height="32" fill="var(--m-paper, #fafaf5)" stroke="var(--m-panel-edge, #e4e1d4)"/>
+  <text x="225" y="304" font-size="12" text-anchor="middle" fill="var(--m-ink-mute, #6f6f6a)">0</text>
+  <rect x="284" y="284" width="106" height="32" fill="var(--m-paper, #fafaf5)" stroke="var(--m-panel-edge, #e4e1d4)"/>
+  <text x="337" y="304" font-size="12" text-anchor="middle" fill="var(--m-ink-mute, #6f6f6a)">0</text>
+  <rect x="396" y="284" width="106" height="32" fill="var(--m-paper, #fafaf5)" stroke="var(--m-panel-edge, #e4e1d4)"/>
+  <text x="449" y="304" font-size="12" text-anchor="middle" fill="var(--m-ink-mute, #6f6f6a)">0</text>
+  <rect x="508" y="284" width="106" height="32" fill="var(--m-paper, #fafaf5)" stroke="var(--m-panel-edge, #e4e1d4)"/>
+  <text x="561" y="304" font-size="12" text-anchor="middle" fill="var(--m-ink-mute, #6f6f6a)">0</text>
+</svg>

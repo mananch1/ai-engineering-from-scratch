@@ -1,0 +1,79 @@
+{
+  "kind": "evidence-bundle-summary",
+  "filters": {},
+  "total_retained_records": 2,
+  "matching_records": 2,
+  "unknown_revisions": 0,
+  "records": [
+    {
+      "evidence_id": "ev_1f3bca22a69485fa2eaf7bdd59847e92fb77517bac6c01e657e143c14870013f",
+      "subject": {
+        "name": "ledger-arm64-O2",
+        "digest": {
+          "sha256": "8bbbaa5866c3fc9f6f598943350b55b5c11669dd1d5e41005efdfe44241915b3"
+        },
+        "local_path": "$CAPTURE/fixtures/ledger-arm64-O2",
+        "format": "mach-o",
+        "architecture": "arm64"
+      },
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "operation": "analyze_function",
+      "confidence": "observed",
+      "authority": "shipped-artifact",
+      "analysis_profile_digest": "966e6016724421ad282356f583a9d5bf24577db4ac77a75c7099d236b88bcc28",
+      "retention": "complete-record",
+      "limitation_count": 10,
+      "native_dossier": {
+        "available": true,
+        "procedure_address": "0x100000500",
+        "procedure_name": "_percent_change",
+        "value_flow": {
+          "status": "observed",
+          "truncated": false,
+          "omitted_operations_lower_bound": 0,
+          "known_omitted_inputs": 0,
+          "known_omitted_edges": 0
+        }
+      }
+    },
+    {
+      "evidence_id": "ev_a36b5090a55390a6a2b689d6f50bed679628395e6331ca55bd726a54f21f8c41",
+      "subject": {
+        "name": "ledger-arm64-O2",
+        "digest": {
+          "sha256": "8bbbaa5866c3fc9f6f598943350b55b5c11669dd1d5e41005efdfe44241915b3"
+        },
+        "local_path": "$CAPTURE/fixtures/ledger-arm64-O2",
+        "format": "mach-o",
+        "architecture": "arm64"
+      },
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "operation": "analyze_function",
+      "confidence": "observed",
+      "authority": "shipped-artifact",
+      "analysis_profile_digest": "966e6016724421ad282356f583a9d5bf24577db4ac77a75c7099d236b88bcc28",
+      "retention": "complete-record",
+      "limitation_count": 10,
+      "native_dossier": {
+        "available": true,
+        "procedure_address": "0x100000554",
+        "procedure_name": "_total",
+        "value_flow": {
+          "status": "observed",
+          "truncated": false,
+          "omitted_operations_lower_bound": 0,
+          "known_omitted_inputs": 0,
+          "known_omitted_edges": 0
+        }
+      }
+    }
+  ]
+}

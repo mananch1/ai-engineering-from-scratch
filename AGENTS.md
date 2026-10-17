@@ -2,13 +2,13 @@
 
 Operating manual for contributors and AI agents touching this repo. Read it before opening a PR.
 
-The repo is a curriculum, not a SaaS app. The lessons are the product. Every rule below keeps 523 lessons coherent over time.
+The repo is a curriculum, not a SaaS app. The lessons are the product. Every rule below keeps 542 lessons coherent over time.
 
 ---
 
 ## Philosophy
 
-523 lessons. 20 phases. Every algorithm built from raw math before a single framework gets imported. You write backprop, the tokenizer, the attention mechanism, and the agent loop by hand in Python, TypeScript, Rust, or Julia. Then you run the same operation through the production library so the framework stops being a black box. The "Build It / Use It" split is the spine. Each lesson ships a reusable artifact you can plug into your daily workflow.
+542 lessons. 20 phases. Every algorithm built from raw math before a single framework gets imported. You write backprop, the tokenizer, the attention mechanism, and the agent loop by hand in Python, TypeScript, Rust, or Julia. Then you run the same operation through the production library so the framework stops being a black box. The "Build It / Use It" split is the spine. Each lesson ships a reusable artifact you can plug into your daily workflow.
 
 ---
 
@@ -33,6 +33,12 @@ certifications/claude/
   tracks/*.json               # exam blueprint, ordered route, study plans
   lessons/NN-slug/            # shared certification lesson contract
   assessments/<exam-code>/    # original diagnostics and full mocks
+manuals/
+  AUTHORING.md                # manual contract: shape, figures, capture kit, prose limits
+  <id>/manual.json            # pinned subject, palette, parts and sections
+  <id>/sections/*.md          # one file per section
+  <id>/figures/*.svg          # static figures; figure kit sources in figures/src/
+  <id>/capture/               # offline capture kit and the records it wrote
 scripts/                      # automation
 .github/workflows/
   curriculum.yml              # invariant + auto-sync workflow
@@ -103,6 +109,8 @@ The `**Languages:**` field must match the languages with a `main.*` file in `cod
 ```
 
 Exactly 6 questions: 1 pre + 3 check + 2 post. `correct` is zero-indexed. The site renderer only understands this shape — legacy `q/choices/answer` schemas crash silently.
+
+Keep the distractors comparable in length to the correct option. When the correct answer is the longest by a wide margin, a reader can guess it without knowing the material. `scripts/check_quiz_bias.py --check` gates this, and `scripts/debias_quizzes.py` spreads the correct option across positions.
 
 ### Claude certification contract
 
@@ -189,6 +197,10 @@ website and is intentionally outside the book-generation pipeline.
 It remains English-only and is intentionally outside the machine-translation
 pipeline as well.
 
+### Manual contract
+
+A manual under `manuals/<id>/` explains one subject at one pinned version, built from offline captures and ranked sources. Read `manuals/AUTHORING.md` before writing one. `node scripts/audit_manuals.js` must report `TOTAL 0`: it checks section shape, prose limits, figure legibility, listing provenance, verbatim quotes, and capture drift. Commit one section per commit as `feat(manual/<id>): <section slug>`. Manuals stay outside the book and translation pipelines; their PDFs are release assets, never committed.
+
 ### code/
 
 - Runs end-to-end and exits 0 on the canonical command for the language.
@@ -210,6 +222,7 @@ Run locally before pushing:
 python3 scripts/audit_lessons.py
 python3 scripts/audit_certifications.py
 python3 scripts/check_readme_counts.py        # advisory — CI fixes on merge
+node --test site/test_manuals.js && node scripts/audit_manuals.js   # when manuals/ changes
 
 # For each lesson touched:
 cd phases/NN-phase/MM-lesson/code
@@ -246,6 +259,14 @@ CI gates (`.github/workflows/curriculum.yml`):
 | `glossary/terms.md`           | when introducing a term used by more than one lesson             |
 
 **Common bug**: if `grep -c 'tree/main/phases/NN-' site/data.js` is 0 after merge, the Phase NN README rows are plain text and missing the `[Title](phases/NN-...)` markdown link. `site/build.js` derives the URL from that link.
+
+### Social cards
+
+Every page shares its own 1200x630 card from `/og/<type>/<id>.png`, rendered by `api/og.js` with `lib/og-render.js`. The card text comes from the data that builds the page: `lesson-seo.json`, `certification-seo.json`, and `site/og-cards.json`, which `site/build.js` writes. Each card URL carries a content hash (`?v=`), so a changed title or count gets a new URL.
+
+- A new static page needs an entry in `PAGES` in `lib/og-cards.js` and an `og:image` tag for `/og/page/<id>.png`. The deploy step in `site/version-assets.js` writes the other image tags and the version.
+- The version also hashes `lib/og-render.js` and `lib/og-fonts/`, so a new layout or atlas gets new URLs without a manual bump.
+- `node scripts/build-og-fonts.js` rebuilds the glyph atlases with Chrome. Run it on a developer machine only, never in CI or the Vercel build.
 
 ---
 
@@ -306,4 +327,4 @@ gh pr create --title "feat(phase-NN/MM): add <slug>" --body "<5-line summary>"
 
 ---
 
-Last reviewed: 2026-05-27.
+Last reviewed: 2026-10-06.

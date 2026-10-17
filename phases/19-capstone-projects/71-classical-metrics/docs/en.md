@@ -105,7 +105,7 @@ def lcs_length(a, b):
     return int(dp[n, m])
 ```
 
-The numpy table makes the implementation legible; pure Python lists would work too. Tasks that opt into ROUGE-L pay the O(n m) cost per task. For typical summary lengths that stays under a millisecond.
+The numpy table makes the implementation legible; pure Python lists would work too. Tasks that opt into ROUGE-L pay the $O(n m)$ cost per task. For typical summary lengths that stays under a millisecond.
 
 ## Accuracy
 

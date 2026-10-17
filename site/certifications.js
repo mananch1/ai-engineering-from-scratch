@@ -3,7 +3,7 @@
 
   var root = document.documentElement;
   var assessmentTimer = null;
-  var TUTOR_GUIDE_URL = 'https://github.com/rohitg00/ai-engineering-from-scratch/blob/main/certifications/claude/GETTING_STARTED.md';
+  var GITHUB_BLOB_BASE = 'https://github.com/rohitg00/ai-engineering-from-scratch/blob/main/';
 
   function esc(value) {
     var div = document.createElement('div');
@@ -12,17 +12,42 @@
   }
 
   function attr(value) {
-    return esc(value).replace(/`/g, '&#96;');
+    return esc(value).replace(/"/g, '&quot;').replace(/`/g, '&#96;');
+  }
+
+  function formatCount(value) {
+    return (Number(value) || 0).toLocaleString('en');
+  }
+
+  function countLabel(value, singular, plural) {
+    return formatCount(value) + ' ' + (Number(value) === 1 ? singular : plural);
+  }
+
+  function factText(fact) {
+    return fact.label === 'Validity' && typeof fact.value === 'number' ? countLabel(fact.value, 'month', 'months') : fact.value;
   }
 
   function data() {
     return typeof CERTIFICATIONS !== 'undefined' && CERTIFICATIONS
       ? CERTIFICATIONS
-      : { program: null, tracks: [], lessonsByPath: {}, assessmentsById: {} };
+      : { programs: [], tracks: [], lessonsByPath: {}, assessmentsById: {} };
   }
 
   function tracks() {
     return Array.isArray(data().tracks) ? data().tracks : [];
+  }
+
+  function programs() {
+    return Array.isArray(data().programs) ? data().programs : [];
+  }
+
+  function programForTrack(track) {
+    var id = track && track.programId;
+    return programs().find(function (program) { return program.id === id; }) || {};
+  }
+
+  function githubBlobUrl(relativePath) {
+    return relativePath ? GITHUB_BLOB_BASE + relativePath : '';
   }
 
   function query(name) {
@@ -120,7 +145,7 @@
 
   function validatedInternalLessonReference(ref) {
     var path = lessonRefPath(ref);
-    if (!/^(?:certifications\/claude\/lessons\/[^/?#]+|phases\/[^/?#]+\/[^/?#]+)$/.test(path)) return null;
+    if (!/^(?:certifications\/[a-z0-9][a-z0-9-]*\/lessons\/[^/?#]+|phases\/[^/?#]+\/[^/?#]+)$/.test(path)) return null;
     var lesson = findKnownLesson(path);
     if (!lesson) return null;
     return {
@@ -164,17 +189,23 @@
     return examValue(track, ['durationMinutes', 'minutes', 'timeLimitMinutes'], 'Not listed');
   }
 
+  function unpublished(track, flag) {
+    return !!(track && track.exam && track.exam[flag] === false);
+  }
+
   function questions(track) {
+    if (unpublished(track, 'itemCountPublished')) return 'Not published';
     return examValue(track, ['questionCount', 'questions', 'items'], 'Not listed');
   }
 
   function passing(track) {
+    if (unpublished(track, 'passingScorePublished')) return 'Not published';
     return examValue(track, ['passingScaledScore', 'passingScore', 'passingScaled'], 'See official guide');
   }
 
   function price(track) {
     var value = examValue(track, ['price', 'fee', 'priceUsd', 'feeUsd'], 'See official provider');
-    if (typeof value === 'number') return '$' + value;
+    if (typeof value === 'number') return '$' + formatCount(value);
     return value;
   }
 
@@ -213,9 +244,9 @@
 
   function examFacts(track) {
     return [
-      { value: questions(track), label: 'Questions' },
+      { value: questions(track), label: 'Questions', unpublished: unpublished(track, 'itemCountPublished') },
       { value: String(minutes(track)).match(/^\d+$/) ? minutes(track) + ' min' : minutes(track), label: 'Time limit' },
-      { value: passing(track), label: 'Passing score' },
+      { value: passing(track), label: 'Passing score', unpublished: unpublished(track, 'passingScorePublished') },
       { value: price(track), label: 'Exam fee' },
       { value: examValue(track, ['format'], 'Closed book'), label: 'Format' },
       { value: examValue(track, ['validityMonths', 'validForMonths'], 'See provider'), label: 'Validity' },
@@ -223,10 +254,8 @@
   }
 
   function renderCardFacts(track, limit) {
-    return examFacts(track).slice(0, limit || 3).map(function (fact) {
-      var value = fact.value;
-      if (fact.label === 'Validity' && typeof value === 'number') value += ' months';
-      return '<div class="cert-card-fact"><strong>' + esc(value) + '</strong><span class="cert-fact-label">' + esc(fact.label) + '</span></div>';
+    return examFacts(track).filter(function (fact) { return !fact.unpublished; }).slice(0, limit || 3).map(function (fact) {
+      return '<div class="cert-card-fact"><strong>' + esc(factText(fact)) + '</strong><span class="cert-fact-label">' + esc(fact.label) + '</span></div>';
     }).join('');
   }
 
@@ -235,72 +264,127 @@
     if (!badge || !badge.imageUrl) return '';
     var width = Number(badge.width) || 600;
     var height = Number(badge.height) || width;
-    return '<img class="cert-track-badge" src="' + attr(badge.imageUrl) + '" width="' + width + '" height="' + height + '" loading="lazy" decoding="async" referrerpolicy="no-referrer" alt="" aria-hidden="true">';
+    var shapeClass = badge.shape === 'square' ? ' cert-track-badge--square' : '';
+    return '<img class="cert-track-badge' + shapeClass + '" src="' + attr(badge.imageUrl) + '" width="' + width + '" height="' + height + '" loading="lazy" decoding="async" referrerpolicy="no-referrer" alt="" aria-hidden="true">';
   }
 
-  function renderAccessNotice(id, program, includeAllLinks) {
-    var mount = document.getElementById(id);
-    if (!mount) return;
+  function accessNoticeHtml(program, includeAllLinks) {
     var notice = program && program.accessNotice;
-    if (!notice) {
-      mount.hidden = true;
-      mount.innerHTML = '';
-      return;
-    }
+    if (!notice) return '';
     var links = Array.isArray(program.officialLinks) ? program.officialLinks.filter(function (link) {
       if (!link || !link.url) return false;
       return includeAllLinks || String(link.label || '').toLowerCase().indexOf('faq') !== -1;
     }) : [];
-    mount.hidden = false;
-    mount.innerHTML = '<div><strong>Official exam access is currently restricted</strong><p>' + esc(notice) + '</p></div>' +
+    return '<div><strong>' + esc(program.accessNoticeTitle || 'Official exam access') + '</strong><p>' + esc(notice) + '</p></div>' +
       (links.length ? '<div class="cert-source-links" aria-label="Official certification sources">' + links.map(function (link) {
         return '<a href="' + attr(link.url) + '" target="_blank" rel="noopener">' + esc(link.label || 'Official source') + ' ↗</a>';
       }).join('') + '</div>' : '');
   }
 
+  function renderAccessNotice(id, program, includeAllLinks) {
+    var mount = document.getElementById(id);
+    if (!mount) return;
+    var html = accessNoticeHtml(program, includeAllLinks);
+    mount.hidden = !html;
+    mount.innerHTML = html;
+  }
+
+  function disclaimerParagraphsHtml(program) {
+    return '<p>' + esc(program.disclaimer) + '</p>' +
+      (program.scoringNotice ? '<p>' + esc(program.scoringNotice) + '</p>' : '');
+  }
+
+  function programNoticeHtml(program, heading) {
+    return '<strong>' + esc(heading) + '</strong>' + disclaimerParagraphsHtml(program);
+  }
+
+  function renderProgramNotice(id, program, heading) {
+    var mount = document.getElementById(id);
+    if (!mount || !program || !program.disclaimer) return;
+    mount.innerHTML = programNoticeHtml(program, heading);
+  }
+
+  function programLinksHtml(program) {
+    var label = program.shortName || program.name || 'this certification';
+    var links = [];
+    if (program.learnerGuidePath) {
+      links.push('<a class="cert-action secondary" href="' + attr(githubBlobUrl(program.learnerGuidePath)) + '" target="_blank" rel="noopener" aria-label="' + attr('Learn ' + label + ' with an AI tutor on GitHub, opens in a new tab') + '">Learn with an AI tutor on GitHub ↗</a>');
+    }
+    if (program.tutorSkillPath) {
+      links.push('<a class="cert-action secondary" href="' + attr(githubBlobUrl(program.tutorSkillPath)) + '" target="_blank" rel="noopener" aria-label="' + attr('Read the ' + label + ' tutor skill on GitHub, opens in a new tab') + '">Read the tutor skill ↗</a>');
+    }
+    return links.length ? '<div class="cert-track-hero-actions cert-program-actions">' + links.join('') + '</div>' : '';
+  }
+
+  function joinLabels(labels) {
+    if (labels.length < 2) return labels.join('');
+    return labels.slice(0, -1).join(', ') + ' and ' + labels[labels.length - 1];
+  }
+
+  function latestVerified(list) {
+    return list.map(function (program) {
+      return program.verifiedAt || program.lastVerified || program.updatedAt || '';
+    }).filter(Boolean).sort().pop() || '';
+  }
+
+  function renderTrackCard(track, index) {
+    var domains = Array.isArray(track.domains) ? track.domains.length : 0;
+    var lessonCount = Array.isArray(track.lessons) ? track.lessons.length : 0;
+    var delay = Math.min(index * 30, 80);
+    var badge = renderTrackBadge(track);
+    return '<a class="cert-track-card cert-catalog-arrival" style="--cert-arrival-delay:' + delay + 'ms" href="certification?id=' + encodeURIComponent(track.id) + '">' +
+      '<div class="cert-card-top"><span class="cert-card-code">' + esc(track.examCode || track.shortName || track.slug) + '</span><span class="cert-status">' + esc(track.level || 'Study path') + '</span></div>' +
+      '<div class="cert-card-identity' + (badge ? ' has-badge' : '') + '"><h3>' + esc(track.credential || track.title || track.shortName || track.id) + '</h3>' + badge + '</div>' +
+      '<p>' + esc(track.summary || track.audience || 'A practical route through this certification blueprint.') + '</p>' +
+      '<div class="cert-card-facts">' + renderCardFacts(track, 3) + '</div>' +
+      '<div class="cert-card-footer"><span>' + countLabel(lessonCount, 'lesson', 'lessons') + ' · ' + countLabel(domains, 'domain', 'domains') + '</span><span>Open path →</span></div>' +
+    '</a>';
+  }
+
   function renderCatalog() {
     var certs = data();
-    var program = certs.program || {};
-    var title = document.getElementById('certProgramTitle');
     var summary = document.getElementById('certProgramSummary');
     var meta = document.getElementById('certProgramMeta');
-    var grid = document.getElementById('certTrackGrid');
-    if (!grid) return;
+    var mount = document.getElementById('certProgramSections');
+    if (!mount) return;
 
-    if (!certs.program || !tracks().length) {
-      grid.innerHTML = '<div class="cert-empty">Certification tracks are being assembled. Run <code>node site/build.js</code> after adding the program manifests.</div>';
+    var available = programs().filter(function (program) {
+      return tracks().some(function (track) { return track.programId === program.id; });
+    });
+    if (!available.length) {
+      mount.innerHTML = '<div class="cert-container cert-section"><div class="cert-empty">Certification tracks are being assembled. Run <code>node site/build.js</code> after adding the program manifests.</div></div>';
       if (summary) summary.textContent = 'The local certification catalog has not been generated yet.';
       return;
     }
 
-    if (title) title.textContent = 'AI certification curriculum';
-    if (summary) summary.textContent = 'Free, independent, open-source preparation for AI engineering credentials. Start with Claude, with more certification families coming next.';
+    var labels = joinLabels(available.map(function (program) { return program.shortName || program.name || program.id; }));
+    if (summary) summary.textContent = 'Free, independent, open-source preparation for AI engineering credentials. ' + labels + ' paths are available now, with more certification families coming next.';
     if (meta) {
-      var verified = program.verifiedAt || program.lastVerified || program.updatedAt;
-      meta.innerHTML = metaChip('Claude available now') +
-        metaChip(tracks().length + ' role-based tracks') +
-        metaChip(Object.keys(certs.lessonsByPath || {}).length + ' certification lessons') +
+      var verified = latestVerified(available);
+      meta.innerHTML = metaChip(labels + ' available now') +
+        metaChip(countLabel(tracks().length, 'role-based track', 'role-based tracks')) +
+        metaChip(countLabel(Object.keys(certs.lessonsByPath || {}).length, 'certification lesson', 'certification lessons')) +
         metaChip(verified ? 'Verified ' + formatDate(verified) : 'Versioned source material');
     }
-    renderAccessNotice('certAccessNotice', program, true);
     var notice = document.getElementById('certProgramNotice');
-    if (notice && program.disclaimer) {
-      notice.innerHTML = '<strong>Independent preparation</strong><p>' + esc(program.disclaimer) + '</p>' +
-        (program.scoringNotice ? '<p>' + esc(program.scoringNotice) + '</p>' : '');
+    var disclaimed = available.filter(function (program) { return program.disclaimer; });
+    if (notice && disclaimed.length) {
+      notice.innerHTML = '<strong>Independent preparation</strong>' + disclaimed.map(disclaimerParagraphsHtml).join('');
     }
 
-    grid.innerHTML = tracks().map(function (track, index) {
-      var domains = Array.isArray(track.domains) ? track.domains.length : 0;
-      var lessonCount = Array.isArray(track.lessons) ? track.lessons.length : 0;
-      var delay = Math.min(index * 30, 80);
-      var badge = renderTrackBadge(track);
-      return '<a class="cert-track-card cert-catalog-arrival" style="--cert-arrival-delay:' + delay + 'ms" href="certification?id=' + encodeURIComponent(track.id) + '">' +
-        '<div class="cert-card-top"><span class="cert-card-code">' + esc(track.examCode || track.shortName || track.slug) + '</span><span class="cert-status">' + esc(track.level || 'Study path') + '</span></div>' +
-        '<div class="cert-card-identity' + (badge ? ' has-badge' : '') + '"><h3>' + esc(track.credential || track.title || track.shortName || track.id) + '</h3>' + badge + '</div>' +
-        '<p>' + esc(track.summary || track.audience || 'A practical route through this certification blueprint.') + '</p>' +
-        '<div class="cert-card-facts">' + renderCardFacts(track, 3) + '</div>' +
-        '<div class="cert-card-footer"><span>' + lessonCount + ' lessons · ' + domains + ' domains</span><span>Open path →</span></div>' +
-      '</a>';
+    var cardIndex = 0;
+    mount.innerHTML = available.map(function (program) {
+      var headingId = 'certProgram-' + program.id;
+      var access = accessNoticeHtml(program, true);
+      var cards = tracks().filter(function (track) { return track.programId === program.id; }).map(function (track) {
+        return renderTrackCard(track, cardIndex++);
+      }).join('');
+      return '<section class="cert-container cert-section cert-program-section" aria-labelledby="' + attr(headingId) + '">' +
+        '<div class="cert-section-heading"><div><div class="cert-eyebrow">' + esc(program.provider || 'Certification program') + '</div><h2 id="' + attr(headingId) + '">' + esc(program.name || program.id) + '</h2></div><p>' + esc(program.summary || '') + '</p></div>' +
+        (access ? '<aside class="cert-access-notice" aria-label="' + attr((program.shortName || program.name || 'Certification') + ' official exam access') + '">' + access + '</aside>' : '') +
+        programLinksHtml(program) +
+        '<div class="cert-track-grid">' + cards + '</div>' +
+      '</section>';
     }).join('');
   }
 
@@ -387,6 +471,8 @@
     }
 
     renderTrackSeo(track);
+    var program = programForTrack(track);
+    var tutorUrl = githubBlobUrl(program.learnerGuidePath);
     var breadcrumb = document.getElementById('trackBreadcrumb');
     if (breadcrumb) breadcrumb.textContent = track.examCode || track.shortName || track.id;
     var refs = Array.isArray(track.lessons) ? track.lessons : [];
@@ -401,18 +487,17 @@
       '<h1>' + esc(track.credential || track.title || track.shortName || track.id) + '</h1>' +
       '<p class="cert-track-summary">' + esc(track.summary || track.audience || '') + '</p>' +
       '<div class="cert-meta-row">' + examFacts(track).map(function (fact) {
-        var value = fact.value;
-        if (fact.label === 'Validity' && typeof value === 'number') value += ' months';
-        return metaChip(fact.label + ': ' + value);
+        return metaChip(fact.label + ': ' + factText(fact));
       }).join('') + '</div>' +
       '<div class="cert-track-hero-actions">' +
         (firstPath ? '<a class="cert-action" href="lesson?path=' + encodeURIComponent(firstPath) + '&track=' + encodeURIComponent(track.id) + '">' + (complete ? 'Continue path' : 'Start learning') + '</a>' : '') +
         '<a class="cert-action secondary" href="#trackAssessments">Practice readiness</a>' +
-        '<a class="cert-action secondary" href="' + attr(TUTOR_GUIDE_URL) + '" target="_blank" rel="noopener" aria-label="Learn with an AI tutor on GitHub (opens in a new tab)">Learn with an AI tutor on GitHub ↗</a>' +
+        (tutorUrl ? '<a class="cert-action secondary" href="' + attr(tutorUrl) + '" target="_blank" rel="noopener" aria-label="Learn with an AI tutor on GitHub (opens in a new tab)">Learn with an AI tutor on GitHub ↗</a>' : '') +
         (track.exam && track.exam.officialGuideUrl ? '<a class="cert-action secondary" href="' + attr(track.exam.officialGuideUrl) + '" target="_blank" rel="noopener">Official exam guide</a>' : '') +
       '</div>';
 
-    renderAccessNotice('trackAccessNotice', data().program || {}, false);
+    renderAccessNotice('trackAccessNotice', program, false);
+    renderProgramNotice('trackProgramNotice', program, 'Independent preparation');
     renderTrackProgress(track);
     renderDomains(track);
     renderLessons(track);
@@ -441,7 +526,7 @@
     var attempted = assessments.filter(function (meta) { return assessmentBest(meta.id); }).length;
     mount.innerHTML = '<div class="cert-progress-head"><div><div class="cert-eyebrow">LOCAL PROGRESS</div><h2 id="progressTitle">Your progress</h2></div><div class="cert-progress-number">' + percent + '%</div></div>' +
       '<div class="cert-progress-bar" role="progressbar" aria-labelledby="progressTitle" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + percent + '"><div class="cert-progress-fill" style="--cert-progress:' + (percent / 100) + '"></div></div>' +
-      '<div class="cert-progress-detail"><span>' + complete + ' of ' + total + ' lessons complete</span><span>' + attempted + ' of ' + assessments.length + ' assessments attempted</span><span>' + (progressIsPersistent() ? 'Stored only in this browser' : 'Browser storage unavailable; progress is temporary') + '</span></div>';
+      '<div class="cert-progress-detail"><span>' + formatCount(complete) + ' of ' + countLabel(total, 'lesson', 'lessons') + ' complete</span><span>' + formatCount(attempted) + ' of ' + countLabel(assessments.length, 'assessment', 'assessments') + ' attempted</span><span>' + (progressIsPersistent() ? 'Stored only in this browser' : 'Browser storage unavailable; progress is temporary') + '</span></div>';
   }
 
   function renderDomains(track) {
@@ -502,7 +587,7 @@
     var mount = document.getElementById('trackAssessments');
     if (!mount) return;
     var assessments = Array.isArray(track.assessments) ? track.assessments : [];
-    mount.classList.toggle('cert-two-card-grid', assessments.length === 2);
+    mount.classList.toggle('cert-two-card-grid', assessments.length === 2 || assessments.length === 4);
     mount.innerHTML = assessments.length ? assessments.map(function (meta) {
       var assessment = data().assessmentsById[meta.id] || meta;
       var best = assessmentBest(meta.id);
@@ -511,7 +596,7 @@
       var latest = attempts[0] || null;
       var count = assessment.questionCount || meta.questionCount || (Array.isArray(assessment.questions) ? assessment.questions.length : 0);
       var limit = assessment.timeLimitMinutes || meta.timeLimitMinutes || 0;
-      return '<article class="cert-assessment-card"><div class="cert-assessment-head"><span class="cert-assessment-kind">' + esc(assessment.kind || 'Practice') + '</span><span class="cert-card-code">' + count + ' questions' + (limit ? ' · ' + limit + ' min' : '') + '</span></div><h3>' + esc(assessment.title || meta.title || 'Practice assessment') + '</h3><p>' + esc(assessment.summary || assessment.description || 'Original scenario practice with feedback after submission.') + '</p><div class="cert-assessment-best">' + (best ? 'Best practice score: ' + best.percent + '%' : 'Not attempted on this device') + '</div><div class="cert-track-hero-actions"><a class="cert-action" href="assessment.html?id=' + encodeURIComponent(meta.id) + '">' + (latest ? 'Try again' : 'Start practice') + '</a>' + (latest ? '<a class="cert-action secondary" href="assessment.html?id=' + encodeURIComponent(meta.id) + '&result=latest">Review latest result</a>' : '') + '</div></article>';
+      return '<article class="cert-assessment-card"><div class="cert-assessment-head"><span class="cert-assessment-kind">' + esc(assessment.kind || 'Practice') + '</span><span class="cert-card-code">' + countLabel(count, 'question', 'questions') + (limit ? ' · ' + limit + ' min' : '') + '</span></div><h3>' + esc(assessment.title || meta.title || 'Practice assessment') + '</h3><p>' + esc(assessment.summary || assessment.description || 'Original scenario practice with feedback after submission.') + '</p><div class="cert-assessment-best">' + (best ? 'Best practice score: ' + best.percent + '%' : 'Not attempted on this device') + '</div><div class="cert-track-hero-actions"><a class="cert-action" href="assessment.html?id=' + encodeURIComponent(meta.id) + '">' + (latest ? 'Try again' : 'Start practice') + '</a>' + (latest ? '<a class="cert-action secondary" href="assessment.html?id=' + encodeURIComponent(meta.id) + '&result=latest">Review latest result</a>' : '') + '</div></article>';
     }).join('') : '<div class="cert-empty">Practice assessments are being prepared for this track.</div>';
   }
 
@@ -655,6 +740,7 @@
   }
 
   function renderAssessmentLoaded(mount, assessment, track, forceForm) {
+    renderProgramNotice('assessmentProgramNotice', programForTrack(track), 'Independent practice');
     var questions = (assessment.questions || []).map(normalizeQuestion);
     if (!questions.length) {
       mount.innerHTML = '<div class="cert-error"><h1>Practice is being written</h1><p>This assessment has metadata but no questions yet.</p><a class="cert-action" href="' + (track ? 'certification?id=' + encodeURIComponent(track.id) : 'certifications.html') + '">Back to track</a></div>';
@@ -681,7 +767,7 @@
       if (window.AIFSCertProgress) window.AIFSCertProgress.saveDraft(assessment.id, version, draft);
     }
 
-    mount.innerHTML = '<div class="assessment-shell"><div class="cert-breadcrumb"><a href="certifications.html">Certifications</a><span>/</span>' + (track ? '<a href="certification?id=' + encodeURIComponent(track.id) + '">' + esc(track.examCode || track.shortName || track.id) + '</a><span>/</span>' : '') + '<span>Practice</span></div><section class="assessment-hero"><div class="cert-eyebrow">' + esc(assessment.kind || 'PRACTICE') + '</div><h1>' + esc(title) + '</h1><p>' + esc(assessment.summary || assessment.description || 'Work through the original scenarios, then submit to reveal explanations and domain feedback.') + '</p><p class="assessment-scoring-note">Submit whenever you are ready. Unanswered questions count as incorrect.</p><div class="cert-meta-row">' + metaChip(questions.length + ' original questions') + metaChip(limit ? limit + ' minute limit' : 'Untimed') + metaChip(progressIsPersistent() ? 'Saved locally' : 'Progress lasts for this page only') + '</div></section>' +
+    mount.innerHTML = '<div class="assessment-shell"><div class="cert-breadcrumb"><a href="certifications.html">Certifications</a><span>/</span>' + (track ? '<a href="certification?id=' + encodeURIComponent(track.id) + '">' + esc(track.examCode || track.shortName || track.id) + '</a><span>/</span>' : '') + '<span>Practice</span></div><section class="assessment-hero"><div class="cert-eyebrow">' + esc(assessment.kind || 'PRACTICE') + '</div><h1>' + esc(title) + '</h1><p>' + esc(assessment.summary || assessment.description || 'Work through the original scenarios, then submit to reveal explanations and domain feedback.') + '</p><p class="assessment-scoring-note">Submit whenever you are ready. Unanswered questions count as incorrect.</p><div class="cert-meta-row">' + metaChip(countLabel(questions.length, 'original question', 'original questions')) + metaChip(limit ? limit + ' minute limit' : 'Untimed') + metaChip(progressIsPersistent() ? 'Saved locally' : 'Progress lasts for this page only') + '</div></section>' +
       '<div class="cert-notice"><strong>Practice score only</strong><p>Your result is a percentage created by this open-source course. It is not an official scaled exam score, credential decision, or guarantee of passing.</p></div>' +
       (limit ? '<div class="cert-timer" id="assessmentTimer" role="timer" aria-live="off" aria-label="Time remaining"><span>Time remaining</span><strong id="assessmentTimerValue">' + formatRemaining(draft.deadlineAt - Date.now()) + '</strong></div>' : '') +
       '<form class="assessment-form" id="assessmentForm" tabindex="-1" aria-label="Assessment questions">' + questions.map(function (question, index) { return renderQuestion(question, index, draft.answers[question.id] || []); }).join('') + '<div class="cert-submit-row"><p>You can submit a partial attempt. Unanswered questions count as incorrect, and explanations appear after submission.</p><button class="cert-action" type="submit">Submit practice</button></div></form></div>';

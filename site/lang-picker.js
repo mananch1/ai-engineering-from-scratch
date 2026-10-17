@@ -6,13 +6,14 @@
 (function () {
   'use strict';
   var LANGS = Array.isArray(window.AIFS_LANGS) ? window.AIFS_LANGS : [{ code: 'en', native: 'English' }];
-  var RTL = { ar: 1, he: 1, fa: 1, ur: 1 };
+  var RTL = {};
+  LANGS.forEach(function (l) { if (l.dir === 'rtl') RTL[l.code] = 1; });
   var pickerId = 0;
 
   function isCertificationLesson() {
     try {
       var path = new URLSearchParams(location.search).get('path') || '';
-      return path.indexOf('certifications/claude/lessons/') === 0;
+      return /^certifications\/[a-z0-9][a-z0-9-]*\/lessons\//.test(path);
     } catch (_) {
       return false;
     }
@@ -39,6 +40,13 @@
   }
   window.AIFS_currentLang = current;
   window.AIFS_applyLangDir = applyDir;
+
+  function alternateHrefs() {
+    var hrefs = {};
+    var links = document.querySelectorAll('link[rel="alternate"][hreflang]');
+    for (var i = 0; i < links.length; i++) hrefs[links[i].hreflang] = location.pathname + new URL(links[i].href).search;
+    return hrefs;
+  }
 
   function mount(host) {
     pickerId += 1;
@@ -72,6 +80,7 @@
     var currentLabel = btn.querySelector('.lang-current');
     var filter = panel.querySelector('.lang-filter');
     var list = panel.querySelector('.lang-list');
+    var hrefs = alternateHrefs();
 
     function updateButton() {
       var label = nativeOf(current());
@@ -85,8 +94,14 @@
       list.innerHTML = '';
       LANGS.forEach(function (l) {
         if (q && l.native.toLowerCase().indexOf(q) < 0 && l.code.toLowerCase().indexOf(q) < 0) return;
-        var item = document.createElement('button');
-        item.type = 'button';
+        var href = hrefs[l.code];
+        var item = document.createElement(href ? 'a' : 'button');
+        if (href) {
+          item.href = href;
+          item.hreflang = l.code;
+        } else {
+          item.type = 'button';
+        }
         item.className = 'lang-item' + (l.code === cur ? ' is-current' : '');
         item.id = id + 'Option-' + l.code;
         item.setAttribute('role', 'option');
@@ -144,6 +159,7 @@
       updateButton();
       close(true);
       if (typeof window.AIFS_onLangChange === 'function') window.AIFS_onLangChange(lang);
+      try { document.dispatchEvent(new CustomEvent('aifs:lang', { detail: { lang: lang } })); } catch (_) {}
     }
 
     btn.addEventListener('click', function (e) { e.stopPropagation(); toggle(); });
@@ -181,11 +197,17 @@
         if (e.key === 'Home') next = 0;
         if (e.key === 'End') next = items.length - 1;
         focusOption(next);
+      } else if (e.key === ' ' && item.tagName === 'A') {
+        e.preventDefault();
+        choose(item.dataset.code);
       }
     });
     list.addEventListener('click', function (e) {
       var item = e.target.closest('.lang-item');
-      if (item) choose(item.dataset.code);
+      if (!item) return;
+      if (item.tagName === 'A' && (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button)) return;
+      e.preventDefault();
+      choose(item.dataset.code);
     });
     document.addEventListener('click', function (e) { if (!host.contains(e.target)) close(false); });
     document.addEventListener('keydown', function (e) {
@@ -196,6 +218,7 @@
     });
 
     updateButton();
+    renderList('');
     applyDir(current());
   }
 

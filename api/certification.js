@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { cardTags, cardUrl, trackCard } = require('../lib/og-cards');
 
 const ORIGIN = 'https://aiengineeringfromscratch.com';
 const SEO_START = '<!-- AIFS:CERTIFICATION-SEO:START -->';
@@ -118,6 +119,7 @@ function certificationHead(entry, trackId) {
   const canonical = canonicalForTrack(trackId);
   const title = entry.seoTitle || `${entry.title} - AI Engineering from Scratch`;
   const description = entry.description || entry.excerpt || 'Free, independent certification preparation with ordered lessons and original practice.';
+  const card = trackCard(entry);
   const course = {
     '@type': 'Course',
     name: entry.title,
@@ -154,13 +156,11 @@ function certificationHead(entry, trackId) {
     `  <link rel="canonical" href="${escapeHtml(canonical)}">`,
     `  <meta property="og:title" content="${escapeHtml(title)}">`,
     `  <meta property="og:description" content="${escapeHtml(description)}">`,
-    `  <meta property="og:image" content="${ORIGIN}/og-image.png?v=4">`,
+    ...cardTags(cardUrl('track', trackId, card), card).map(tag => `  ${tag}`),
     `  <meta property="og:url" content="${escapeHtml(canonical)}">`,
     '  <meta property="og:type" content="website">',
-    '  <meta name="twitter:card" content="summary_large_image">',
     `  <meta name="twitter:title" content="${escapeHtml(title)}">`,
     `  <meta name="twitter:description" content="${escapeHtml(description)}">`,
-    `  <meta name="twitter:image" content="${ORIGIN}/og-image.png?v=4">`,
     `  <script type="application/ld+json" id="certificationJsonLd">${jsonForHtml(jsonLd)}</script>`,
   ].join('\n');
 }
@@ -172,7 +172,7 @@ function certificationFallback(entry, trackId) {
     const params = new URLSearchParams();
     params.set('path', lesson.path);
     params.set(
-      lesson.path.startsWith('certifications/claude/lessons/') ? 'track' : 'fromTrack',
+      /^certifications\/[a-z0-9][a-z0-9-]*\/lessons\//.test(lesson.path) ? 'track' : 'fromTrack',
       trackId
     );
     const href = `/lesson?${params.toString()}`;
@@ -211,7 +211,7 @@ function send(res, method, status, body, cacheControl) {
 
 function sendRedirect(res, method, trackId) {
   res.setHeader('Location', `/certification?id=${encodeURIComponent(trackId)}`);
-  send(res, method, 308, '', 'public, max-age=300, s-maxage=86400, stale-while-revalidate=604800');
+  send(res, method, 308, '', 'public, max-age=0, s-maxage=86400, must-revalidate');
 }
 
 function createHandler(options) {
@@ -251,7 +251,7 @@ function createHandler(options) {
       }
       let html = replaceMarkedRegion(template, SEO_START, SEO_END, certificationHead(entry, trackId));
       html = replaceMarkedRegion(html, FALLBACK_START, FALLBACK_END, certificationFallback(entry, trackId));
-      send(res, method, 200, html, 'public, max-age=300, s-maxage=86400, stale-while-revalidate=604800');
+      send(res, method, 200, html, 'public, max-age=0, s-maxage=86400, must-revalidate');
     } catch (_) {
       send(res, method, 500, errorPage('Certification page unavailable', 'The certification page could not be assembled. Continue from the certification index while this page is restored.'), 'no-store');
     }

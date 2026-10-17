@@ -4,7 +4,7 @@
 // by OpenAI, Anthropic, and Google: define, detect, execute, return.
 // Sources:
 //   https://platform.openai.com/docs/guides/function-calling
-//   https://docs.anthropic.com/en/docs/build-with-claude/tool-use
+//   https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview
 //   https://ai.google.dev/gemini-api/docs/function-calling
 
 type JsonValue = string | number | boolean | null | JsonValue[] | { [k: string]: JsonValue };
@@ -94,7 +94,7 @@ function getWeather(args: Readonly<Record<string, JsonValue>>): JsonValue {
 const SEARCH_DB: Readonly<Record<string, ReadonlyArray<{ title: string; url: string; snippet: string }>>> = {
   "python function calling": [
     { title: "OpenAI Function Calling Guide", url: "https://platform.openai.com/docs/guides/function-calling", snippet: "Connect LLMs to external tools." },
-    { title: "Anthropic Tool Use", url: "https://docs.anthropic.com/en/docs/build-with-claude/tool-use", snippet: "Claude can interact with tools and APIs." },
+    { title: "Anthropic Tool Use", url: "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview", snippet: "Claude can interact with tools and APIs." },
   ],
   "mcp protocol": [
     { title: "Model Context Protocol", url: "https://modelcontextprotocol.io", snippet: "Open standard connecting models to data sources." },
@@ -141,7 +141,7 @@ function runCode(args: Readonly<Record<string, JsonValue>>): JsonValue {
   if (language !== "javascript") {
     return { error: true, message: "Language '" + language + "' not supported." };
   }
-  const FORBIDDEN = ["require(", "process.", "fs.", "child_process", "import ", "eval(", "Function("];
+  const FORBIDDEN = ["require(", "process.", "fs.", "child_process", "import ", "eval(", "Function(", "constructor", "globalThis"];
   for (const p of FORBIDDEN) {
     if (code.includes(p)) {
       return { error: true, message: "Forbidden operation: " + p, code: "SECURITY_VIOLATION" };
@@ -209,7 +209,7 @@ function registerAllTools(): void {
   );
   registerTool(
     "run_code",
-    "Execute JavaScript in a sandbox. Assign to 'result' to return output.",
+    "Run a small JavaScript snippet behind a denylist and a restricted evaluator. This is a teaching filter, not real isolation. Assign to 'result' to return output.",
     {
       type: "object",
       properties: {

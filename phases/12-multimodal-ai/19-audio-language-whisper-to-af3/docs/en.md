@@ -36,7 +36,7 @@ Every audio encoder starts with the same feature: a log-Mel spectrogram.
 2. Short-time Fourier transform with 25ms windows, 10ms hop.
 3. Take magnitude of the FFT result.
 4. Apply Mel filter banks (typically 80 filters log-spaced 0-8000 Hz) to warp to perceptual frequency.
-5. Log compress (log(1 + x)) for dynamic range.
+5. Log compress $(\log(1 + x))$ for dynamic range.
 
 Result: a 2D array of shape (T, 80) where T is the number of time frames. For a 30-second clip at 100 Hz frame rate: (3000, 80).
 

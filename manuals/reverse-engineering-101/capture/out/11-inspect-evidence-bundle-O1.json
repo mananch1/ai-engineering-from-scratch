@@ -1,0 +1,257 @@
+{
+  "kind": "evidence-bundle-summary",
+  "filters": {},
+  "total_retained_records": 8,
+  "matching_records": 8,
+  "unknown_revisions": 0,
+  "records": [
+    {
+      "evidence_id": "ev_1524442745f556e2c2f041648c72314f3d06a47d1f58e332c684325ac02d9c60",
+      "subject": {
+        "name": "ledger-arm64-O1",
+        "digest": {
+          "sha256": "01b5d08b08fb94678be5919d0e753d44b505a53107c95b94634f0e5d41c9e375"
+        },
+        "local_path": "$CAPTURE/fixtures/ledger-arm64-O1",
+        "format": "mach-o",
+        "architecture": "arm64"
+      },
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "operation": "analyze_function",
+      "confidence": "observed",
+      "authority": "shipped-artifact",
+      "analysis_profile_digest": "966e6016724421ad282356f583a9d5bf24577db4ac77a75c7099d236b88bcc28",
+      "retention": "complete-record",
+      "limitation_count": 10,
+      "native_dossier": {
+        "available": true,
+        "procedure_address": "0x100000518",
+        "procedure_name": "_grade",
+        "value_flow": {
+          "status": "observed",
+          "truncated": false,
+          "omitted_operations_lower_bound": 0,
+          "known_omitted_inputs": 0,
+          "known_omitted_edges": 0
+        }
+      }
+    },
+    {
+      "evidence_id": "ev_172d39ff37ab60d9e0e1dd33ba7486cb2ee789a46b00d600cd083a825edd1350",
+      "subject": {
+        "name": "ledger-arm64-O1",
+        "digest": {
+          "sha256": "01b5d08b08fb94678be5919d0e753d44b505a53107c95b94634f0e5d41c9e375"
+        },
+        "local_path": "$CAPTURE/fixtures/ledger-arm64-O1",
+        "format": "mach-o",
+        "architecture": "arm64"
+      },
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "operation": "analyze_function",
+      "confidence": "observed",
+      "authority": "shipped-artifact",
+      "analysis_profile_digest": "966e6016724421ad282356f583a9d5bf24577db4ac77a75c7099d236b88bcc28",
+      "retention": "complete-record",
+      "limitation_count": 10,
+      "native_dossier": {
+        "available": true,
+        "procedure_address": "0x100000500",
+        "procedure_name": "_percent_change",
+        "value_flow": {
+          "status": "observed",
+          "truncated": false,
+          "omitted_operations_lower_bound": 0,
+          "known_omitted_inputs": 0,
+          "known_omitted_edges": 0
+        }
+      }
+    },
+    {
+      "evidence_id": "ev_1d2de0237766b05a23285f7609e1935eefa120efee84bb1776c1d311b0533b04",
+      "subject": {
+        "name": "ledger-arm64-O1",
+        "digest": {
+          "sha256": "01b5d08b08fb94678be5919d0e753d44b505a53107c95b94634f0e5d41c9e375"
+        },
+        "local_path": "$CAPTURE/fixtures/ledger-arm64-O1",
+        "format": "mach-o",
+        "architecture": "arm64"
+      },
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "operation": "analyze_function",
+      "confidence": "observed",
+      "authority": "shipped-artifact",
+      "analysis_profile_digest": "966e6016724421ad282356f583a9d5bf24577db4ac77a75c7099d236b88bcc28",
+      "retention": "complete-record",
+      "limitation_count": 10,
+      "native_dossier": {
+        "available": true,
+        "procedure_address": "0x100000588",
+        "procedure_name": "_grade_label",
+        "value_flow": {
+          "status": "observed",
+          "truncated": false,
+          "omitted_operations_lower_bound": 0,
+          "known_omitted_inputs": 0,
+          "known_omitted_edges": 0
+        }
+      }
+    },
+    {
+      "evidence_id": "ev_231b5398a37af922f9e3d226e729989d937d2cf7b6a0006d28c61b5ae169ea17",
+      "subject": {
+        "name": "ledger-arm64-O1",
+        "digest": {
+          "sha256": "01b5d08b08fb94678be5919d0e753d44b505a53107c95b94634f0e5d41c9e375"
+        },
+        "local_path": "$CAPTURE/fixtures/ledger-arm64-O1",
+        "format": "mach-o",
+        "architecture": "arm64"
+      },
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "operation": "list_procedures",
+      "confidence": "observed",
+      "authority": "shipped-artifact",
+      "analysis_profile_digest": "966e6016724421ad282356f583a9d5bf24577db4ac77a75c7099d236b88bcc28",
+      "retention": "complete-record",
+      "limitation_count": 6,
+      "native_dossier": {
+        "available": false,
+        "reason": "different-operation"
+      }
+    },
+    {
+      "evidence_id": "ev_5cee80f7af7e99abf443f69eeac0fdad0d09180158bbe85914a5e6f226f7df1d",
+      "subject": {
+        "name": "ledger-arm64-O1",
+        "digest": {
+          "sha256": "01b5d08b08fb94678be5919d0e753d44b505a53107c95b94634f0e5d41c9e375"
+        },
+        "local_path": "$CAPTURE/fixtures/ledger-arm64-O1",
+        "format": "mach-o",
+        "architecture": "arm64"
+      },
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "operation": "list_strings",
+      "confidence": "observed",
+      "authority": "shipped-artifact",
+      "analysis_profile_digest": "966e6016724421ad282356f583a9d5bf24577db4ac77a75c7099d236b88bcc28",
+      "retention": "complete-record",
+      "limitation_count": 7,
+      "native_dossier": {
+        "available": false,
+        "reason": "different-operation"
+      }
+    },
+    {
+      "evidence_id": "ev_71bb96a48a5b17e05e5800f1cb9a7367a968765a0da02dc407545427a603e5b9",
+      "subject": {
+        "name": "ledger-arm64-O1",
+        "digest": {
+          "sha256": "01b5d08b08fb94678be5919d0e753d44b505a53107c95b94634f0e5d41c9e375"
+        },
+        "local_path": "$CAPTURE/fixtures/ledger-arm64-O1",
+        "format": "mach-o",
+        "architecture": "arm64"
+      },
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "operation": "xrefs",
+      "confidence": "observed",
+      "authority": "shipped-artifact",
+      "analysis_profile_digest": "966e6016724421ad282356f583a9d5bf24577db4ac77a75c7099d236b88bcc28",
+      "retention": "complete-record",
+      "limitation_count": 7,
+      "native_dossier": {
+        "available": false,
+        "reason": "different-operation"
+      }
+    },
+    {
+      "evidence_id": "ev_7c94981bed0147c3d265eb822a26e48ec13e4d7a4ae1eee958fe9758b483b033",
+      "subject": {
+        "name": "ledger-arm64-O1",
+        "digest": {
+          "sha256": "01b5d08b08fb94678be5919d0e753d44b505a53107c95b94634f0e5d41c9e375"
+        },
+        "local_path": "$CAPTURE/fixtures/ledger-arm64-O1",
+        "format": "mach-o",
+        "architecture": "arm64"
+      },
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "operation": "analyze_function",
+      "confidence": "observed",
+      "authority": "shipped-artifact",
+      "analysis_profile_digest": "966e6016724421ad282356f583a9d5bf24577db4ac77a75c7099d236b88bcc28",
+      "retention": "complete-record",
+      "limitation_count": 10,
+      "native_dossier": {
+        "available": true,
+        "procedure_address": "0x100000554",
+        "procedure_name": "_total",
+        "value_flow": {
+          "status": "observed",
+          "truncated": false,
+          "omitted_operations_lower_bound": 0,
+          "known_omitted_inputs": 0,
+          "known_omitted_edges": 0
+        }
+      }
+    },
+    {
+      "evidence_id": "ev_8ef5da766d34603d47be42379c99b41c6d055d8333a49264f3476c99414bbb05",
+      "subject": {
+        "name": "ledger-arm64-O1",
+        "digest": {
+          "sha256": "01b5d08b08fb94678be5919d0e753d44b505a53107c95b94634f0e5d41c9e375"
+        },
+        "local_path": "$CAPTURE/fixtures/ledger-arm64-O1",
+        "format": "mach-o",
+        "architecture": "arm64"
+      },
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "operation": "procedure_assembly",
+      "confidence": "observed",
+      "authority": "shipped-artifact",
+      "analysis_profile_digest": "966e6016724421ad282356f583a9d5bf24577db4ac77a75c7099d236b88bcc28",
+      "retention": "complete-record",
+      "limitation_count": 6,
+      "native_dossier": {
+        "available": false,
+        "reason": "different-operation"
+      }
+    }
+  ]
+}

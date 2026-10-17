@@ -14,6 +14,11 @@ name: translate
 # file, published when the job finishes. A completed run re-translates only
 # lessons whose English changed, and disjoint phase slices merge cleanly.
 #
+# A push runs only the legs its commit range can change: the phases whose
+# English changed, languages newly made automatic, and interface strings when
+# their source changed. scripts/translate_matrix.py makes the choice and
+# docs/i18n.md lists the rules. Manual runs keep their requested scope.
+#
 # The repo README is hand-authored per language and committed to main (see
 # scripts/build_readme_i18n.py and docs/i18n.md); it is not part of this matrix.
 
@@ -23,13 +28,16 @@ on:
     paths:
       - "phases/**/docs/en.md"
       - "languages.json"
+      - "site/ui-strings.json"
+      - "scripts/translate_ui_strings.py"
+      - "scripts/translate_matrix.py"
       # Publisher fixes must be able to bootstrap a missing translations branch
       # even when no English lesson changed in the same merge.
       - ".github/workflows/translate.yml"
   workflow_dispatch:
     inputs:
       langs:
-        description: "space-separated language codes; blank = the ci:true set in languages.json"
+        description: "space-separated non-source codes; blank = automatic lessons and all site UI languages"
         default: ""
       phase:
         description: "one phase directory (for example 01-math-foundations); blank = all phases"
@@ -45,47 +53,29 @@ jobs:
     permissions:
       contents: read
     outputs:
-      langs: ${{ steps.set.outputs.langs }}
-      phases: ${{ steps.set.outputs.phases }}
+      lessons: ${{ steps.set.outputs.lessons }}
+      ui_langs: ${{ steps.set.outputs.ui_langs }}
     steps:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
       - id: set
         env:
+          EVENT: ${{ github.event_name }}
           REQUESTED: ${{ github.event.inputs.langs }}
           REQUESTED_PHASE: ${{ github.event.inputs.phase }}
+          BEFORE: ${{ github.event.before }}
+          AFTER: ${{ github.sha }}
+          FORCED: ${{ github.event.forced }}
         run: |
-          # every emitted code must exist in the registry; requested codes are
-          # intersected with it, so untrusted input can never reach matrix.lang
-          if [ -n "$REQUESTED" ]; then
-            JSON=$(jq -c --arg req "$REQUESTED" \
-              '($req | split(" ") | map(select(length > 0))) as $want
-               | [.languages[].code] as $known
-               | [$want[] | select(. as $c | $known | index($c))]' languages.json)
-          else
-            JSON=$(jq -c '[.languages[] | select(.ci == true) | .code]' languages.json)
-          fi
-          echo "langs=$JSON" >> "$GITHUB_OUTPUT"
-          # Manual runs can select one phase for a cheap end-to-end smoke test.
-          # Push runs and blank manual inputs retain the full phase matrix.
-          if [ -n "$REQUESTED_PHASE" ]; then
-            PHASE_LIST=$(find phases -mindepth 1 -maxdepth 1 -type d -exec basename {} \; \
-              | grep -E '^[0-9]{2}-[a-z0-9-]+$' | sort)
-            if ! printf '%s\n' "$PHASE_LIST" | grep -Fqx -- "$REQUESTED_PHASE"; then
-              echo "unknown phase: $REQUESTED_PHASE" >&2
-              exit 1
-            fi
-            PHASES=$(jq -cn --arg phase "$REQUESTED_PHASE" '[$phase]')
-          else
-            # one shard per phase dir (NN-name); the README is handled off-matrix
-            PHASES=$(find phases -mindepth 1 -maxdepth 1 -type d -exec basename {} \; \
-              | grep -E '^[0-9]{2}-[a-z0-9-]+$' | sort | jq -R . | jq -cs .)
-          fi
-          echo "phases=$PHASES" >> "$GITHUB_OUTPUT"
+          # Only registered non-source codes and existing phase directories may
+          # reach a matrix. The checkout holds only the pushed commit, so the
+          # script fetches the previous one at depth 1 to diff the pushed range.
+          python3 scripts/translate_matrix.py >> "$GITHUB_OUTPUT"
 
   translate:
     needs: prepare
+    if: ${{ needs.prepare.outputs.lessons != '[]' }}
     runs-on: ubuntu-latest
     timeout-minutes: 330
     permissions:
@@ -96,8 +86,7 @@ jobs:
       fail-fast: false
       max-parallel: 20
       matrix:
-        lang: ${{ fromJSON(needs.prepare.outputs.langs) }}
-        phase: ${{ fromJSON(needs.prepare.outputs.phases) }}
+        include: ${{ fromJSON(needs.prepare.outputs.lessons) }}
     steps:
       - name: Checkout main (English source)
         uses: actions/checkout@v4
@@ -225,6 +214,141 @@ jobs:
               fi
               if ! git push origin HEAD:refs/heads/translations; then
                 echo "could not push translation slice" >&2
+                exit 1
+              fi ) && exit 0
+            echo "push race, retrying ($attempt)"
+            sleep "${TRANSLATION_PUBLISH_RETRY_DELAY:-$((RANDOM % 12 + 3))}"
+          done
+          echo "could not publish after retries" >&2; exit 1
+
+  coverage:
+    needs: translate
+    if: ${{ !cancelled() && needs.translate.result != 'skipped' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Translation records match the published lessons
+        run: |
+          git fetch --depth=1 origin "+refs/heads/translations:refs/remotes/origin/translations"
+          node scripts/check_translation_coverage.js --ref origin/translations
+
+  ui-strings:
+    # The site's interface strings (navigation, sidebar, checkpoints, panels)
+    # are translated the same way, from site/ui-strings.json, into one small
+    # i18n/<lang>/ui.json that the browser fetches from the translations branch.
+    # Every site language gets UI strings, including contributor-managed ones.
+    # Keys with a hand-pinned override or a previously published translation
+    # are reused, so most runs load no model at all.
+    needs: prepare
+    if: ${{ needs.prepare.outputs.ui_langs != '[]' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: write
+    env:
+      NLLB_MODEL: facebook/nllb-200-distilled-600M
+    strategy:
+      fail-fast: false
+      matrix:
+        lang: ${{ fromJSON(needs.prepare.outputs.ui_langs) }}
+    steps:
+      - name: Checkout main (English source)
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: .github/translate-requirements.txt
+
+      - name: Cache the NLLB model
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/huggingface
+          key: hf-${{ env.NLLB_MODEL }}
+
+      - name: Install NLLB runtime
+        run: pip install -r .github/translate-requirements.txt
+
+      - name: Restore this language's published interface strings
+        env:
+          LANG_CODE: ${{ matrix.lang }}
+        run: |
+          git fetch origin "+refs/heads/translations:refs/remotes/origin/translations" || true
+          mkdir -p "i18n/$LANG_CODE"
+          if git cat-file -e "origin/translations:i18n/$LANG_CODE/ui.json" 2>/dev/null; then
+            git show "origin/translations:i18n/$LANG_CODE/ui.json" > "i18n/$LANG_CODE/ui.json"
+          fi
+
+      - name: Translate new interface strings (NLLB-200, no key)
+        env:
+          TRANSLATE_PROVIDER: nllb
+          LANG_CODE: ${{ matrix.lang }}
+        run: python3 scripts/translate_ui_strings.py --lang "$LANG_CODE"
+
+      - name: Publish interface strings to translations branch (race-safe)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          LANG_CODE: ${{ matrix.lang }}
+        run: |
+          if [ -n "${TRANSLATION_PUSH_URL:-}" ]; then
+            git remote set-url origin "$TRANSLATION_PUSH_URL"
+          else
+            git remote set-url origin \
+              "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git"
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          FILE="i18n/$LANG_CODE/ui.json"
+          PUBLISH_DIR="$RUNNER_TEMP/ui-strings-publish"
+
+          cleanup_publish_worktree() {
+            git worktree remove --force "$PUBLISH_DIR" 2>/dev/null || true
+            rm -rf "$PUBLISH_DIR"
+            git worktree prune
+          }
+          trap cleanup_publish_worktree EXIT
+
+          # Same detached-worktree retry loop as the lesson shards: only this
+          # one file is replaced, so it merges alongside the phase slices.
+          for attempt in 1 2 3 4 5 6 7 8; do
+            cleanup_publish_worktree
+            if git fetch origin "+refs/heads/translations:refs/remotes/origin/translations"; then
+              BASE=origin/translations
+            else
+              BASE=HEAD
+            fi
+            git worktree add --detach "$PUBLISH_DIR" "$BASE"
+            mkdir -p "$PUBLISH_DIR/$(dirname "$FILE")"
+            cp "$FILE" "$PUBLISH_DIR/$FILE"
+            ( cd "$PUBLISH_DIR" || exit 1
+              if ! git add -f "$FILE"; then
+                echo "could not stage interface strings" >&2
+                exit 1
+              fi
+              if git diff --cached --quiet; then
+                echo "no changes"
+                exit 0
+              else
+                DIFF_STATUS=$?
+                if [ "$DIFF_STATUS" -ne 1 ]; then
+                  echo "could not inspect staged interface strings" >&2
+                  exit 1
+                fi
+              fi
+              if ! git commit -m "chore(i18n): $LANG_CODE / interface strings"; then
+                echo "could not commit interface strings" >&2
+                exit 1
+              fi
+              if ! git push origin HEAD:refs/heads/translations; then
+                echo "could not push interface strings" >&2
                 exit 1
               fi ) && exit 0
             echo "push race, retrying ($attempt)"

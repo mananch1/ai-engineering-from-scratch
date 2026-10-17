@@ -49,7 +49,7 @@ xcode-select --install
 brew install git curl wget
 
 # Ubuntu/Debian
-sudo apt update && sudo apt install -y build-essential git curl wget
+sudo apt update && sudo apt install -y build-essential git curl wget unzip
 
 # Windows (use WSL2)
 wsl --install -d Ubuntu-24.04
@@ -95,6 +95,8 @@ npm install -g pnpm
 
 node -e "console.log('Node', process.version)"
 ```
+
+The fnm installer checks for `unzip` first and exits with `Not installing fnm due to missing dependencies.` when it is absent: on Linux it unpacks a zip archive, on macOS it installs through Homebrew. macOS ships `unzip`; Ubuntu, Debian, and WSL2 get it from the Step 1 apt line (`sudo apt install -y unzip` if you skipped that step).
 
 **macOS / Apple Silicon (M1/M2/M3/M4):** If the installer stops with `Error: Cannot install under Rosetta 2 in ARM default prefix (/opt/homebrew)`, your terminal is running under Rosetta 2 (`arch` prints `i386`) while Homebrew is a native arm64 build. Install fnm forcing arm64, wire it into your shell, then rerun the commands above from `fnm install 22`:
 
@@ -218,3 +220,11 @@ See `outputs/prompt-env-check.md` for a prompt that helps AI assistants diagnose
 1. Run the verification script and fix any failures
 2. Create a Python virtual environment for this course and install PyTorch
 3. Write a "hello world" in all four languages and run each one
+
+### Hints
+
+**Exercise 1.** Run `python3 phases/00-setup-and-tooling/01-dev-environment/code/verify.py --route beginner` from the repository root and fix the first failed line before you look at the next one. The check is done when you run the script again and every required probe passes.
+
+**Exercise 2.** Make the environment with `uv venv` in the repository root, activate it, then install PyTorch with the command from Step 6 that matches your hardware. Run `python -c "import torch; print(torch.__version__)"` inside the environment; a version number means the install worked.
+
+**Exercise 3.** Use the four runtimes from the stack in The Concept: Python, TypeScript on Node.js, Rust, and Julia. Write one small file for each and run it with `python3`, `npx tsx` (Node.js cannot run a `.ts` file directly), `cargo run` or `rustc`, and `julia`. Each run must print your message and exit with code 0.

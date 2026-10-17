@@ -28,9 +28,11 @@ Goodhart's original formulation: "When a measure becomes a target, it ceases to 
 
 Gao et al. give a functional form. Let `d = sqrt(KL(pi || pi_init))`. Let `R_proxy(d)` be mean proxy reward and `R_gold(d)` mean gold reward. Empirically:
 
-```
-R_proxy(d) = alpha * d - beta_proxy * d^2
-R_gold(d)  = alpha * d - beta_gold  * d^2
+```math
+\begin{aligned}
+R_{\text{proxy}}(d) &= \alpha d - \beta_{\text{proxy}} d^2 \\
+R_{\text{gold}}(d) &= \alpha d - \beta_{\text{gold}} d^2
+\end{aligned}
 ```
 
 with `beta_gold > beta_proxy`. Both rise from zero KL, both peak, the gold peak is closer to the origin. At large `d`, gold falls below baseline even while proxy keeps climbing. The proxy-gold gap has the same signature across BoN sampling, PPO, and SFT-to-best.

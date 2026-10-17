@@ -61,7 +61,7 @@ Every classical tracker uses a Kalman filter in the motion-prediction step.
 
 ### The Hungarian algorithm
 
-Given a `M x N` cost matrix (tracks x detections), find the one-to-one assignment that minimises total cost. Cost is usually `1 - IoU(track_bbox, detection_bbox)` or negative cosine similarity of appearance features. Runtime is O((M+N)^3); for M, N up to ~1000 it is fast enough in Python via `scipy.optimize.linear_sum_assignment`.
+Given a `M x N` cost matrix (tracks x detections), find the one-to-one assignment that minimises total cost. Cost is usually `1 - IoU(track_bbox, detection_bbox)` or negative cosine similarity of appearance features. Runtime is $O((M+N)^3)$; for $M, N$ up to ~1000 it is fast enough in Python via `scipy.optimize.linear_sum_assignment`.
 
 ### ByteTrack's key idea
 

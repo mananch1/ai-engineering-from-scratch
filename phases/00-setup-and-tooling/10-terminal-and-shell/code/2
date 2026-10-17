@@ -1,0 +1,8 @@
+2
+4
+16
+Traceback (most recent call last):
+  File "/mnt/d/DOCS/VIT Ebooks/Fourth Year/Sem 7/ai-engineering-from-scratch/phases/00-setup-and-tooling/10-terminal-and-shell/code/loop.py", line 5, in <module>
+    print(i/0)
+          ~^~
+ZeroDivisionError: division by zero

@@ -1,0 +1,17 @@
+{
+  "phases/08-generative-ai/01-generative-models-taxonomy-history/docs/en.md": "3441b569a900f42086a922735075295fdace77d8306cf4ff46fc81413966d858",
+  "phases/08-generative-ai/02-autoencoders-vae/docs/en.md": "eba81d8e5209ac53fa26a2da2852d193c9ce0cbb348c5825cfd76d4495f6f4d6",
+  "phases/08-generative-ai/03-gans-generator-discriminator/docs/en.md": "63258263bc9ce4e9312fb31bea20b813055cfea14aac20dcdf6a3c1c740ea9e9",
+  "phases/08-generative-ai/04-conditional-gans-pix2pix/docs/en.md": "d367559893c31d907b08e7edc3204d27fad7df0271300f6e92a50d06b1ed51a4",
+  "phases/08-generative-ai/05-stylegan/docs/en.md": "e6d93ab2b19ad3f9648424e207aa83465e7b209df10fcd403eeef538ba2d1db5",
+  "phases/08-generative-ai/06-diffusion-ddpm-from-scratch/docs/en.md": "c584ddcc8a6856dfc2171125e691a9ef9ad4d3313b8113c6f61e361cd1b81b67",
+  "phases/08-generative-ai/07-latent-diffusion-stable-diffusion/docs/en.md": "d866f087da7b455a3c13840e6e3624964b0be4b12cc481fdc707770622bca77b",
+  "phases/08-generative-ai/08-controlnet-lora-conditioning/docs/en.md": "949c130b46ce16748e7aa7cf308eb5b62556ca631aa94814d8a2cd69d6f1a137",
+  "phases/08-generative-ai/09-inpainting-outpainting-editing/docs/en.md": "a0a39b1a67b7b04440df938be761512cc0fc841d15d2ca492e7d7cdbad0cdbc2",
+  "phases/08-generative-ai/10-video-generation/docs/en.md": "7f347d1e809f686c1513b70ef278e39d2f5eaced4c4ae8a0d34b4cafc6b0d1ce",
+  "phases/08-generative-ai/11-audio-generation/docs/en.md": "8eb8b1cc04a9cd18df5b8465e85762b5c975bcaf3167e2f092e2e45c71901ecf",
+  "phases/08-generative-ai/12-3d-generation/docs/en.md": "e349a73dbf2f3d8d579824472bb587e724df7f3b99ae97886e56a0642f58eb41",
+  "phases/08-generative-ai/13-flow-matching-rectified-flows/docs/en.md": "25511ba804640ce3df2e2fe51b251e44d140656fe11ce183ebf9c9007cca7e7b",
+  "phases/08-generative-ai/14-evaluation-fid-clip-score/docs/en.md": "38a0cf5e3a972011581bac8e08c7b796bf91cf974f99a6d5dbb54e9dbc5a5559",
+  "phases/08-generative-ai/19-visual-autoregressive-var/docs/en.md": "2027fd1e8921fb2b90bc93eaf9468320416ba4c3b633e6da4a3fca2d505269e3"
+}

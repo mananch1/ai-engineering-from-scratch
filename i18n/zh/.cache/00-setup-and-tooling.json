@@ -1,0 +1,15 @@
+{
+  "phases/00-setup-and-tooling/01-dev-environment/docs/en.md": "85bc7f1f0682cf607f287710b25f2dd3cde1475feaca985a89bf2cefb1e2cf52",
+  "phases/00-setup-and-tooling/02-git-and-collaboration/docs/en.md": "5bcc9ca73bdf9f2a3a647d167ed00ff223a81a9a36f996ce148aa1312d545f08",
+  "phases/00-setup-and-tooling/03-gpu-setup-and-cloud/docs/en.md": "1e6fdb7c16aeab51fb498a3b0d5fe984dd1a67e082d618bf30d1081639502809",
+  "phases/00-setup-and-tooling/04-apis-and-keys/docs/en.md": "1d4748fc1dc1b4ff3313ab9af092b9831221e7f7d96c1107b3938a895ee93346",
+  "phases/00-setup-and-tooling/05-jupyter-notebooks/docs/en.md": "543c38dcbca1352c41924f3a5ad4c6fadd715c38aae7e233e3b2be795865889b",
+  "phases/00-setup-and-tooling/06-python-environments/docs/en.md": "d83b1b070403cd41624ec9d40c890f74b237a94c922bcd8d2f3758a757bcc719",
+  "phases/00-setup-and-tooling/07-docker-for-ai/docs/en.md": "1ed8ca02231e4ed40b749b07f2728659676a5fe4c7de6ad01b1638b5e1c6b198",
+  "phases/00-setup-and-tooling/08-editor-setup/docs/en.md": "e1f15c23a08a69e1f176c11403da0e2580379c1929311754dca686c5cd86dbe6",
+  "phases/00-setup-and-tooling/09-data-management/docs/en.md": "772d99967d3ccde7c765aae10f77622aa3a9db2975a6124d217c307e257dc84a",
+  "phases/00-setup-and-tooling/10-terminal-and-shell/docs/en.md": "17dc65d11d74510bada6bd4cdd1ae4bdb85849632ca0e4a999d0da53b2d5292e",
+  "phases/00-setup-and-tooling/11-linux-for-ai/docs/en.md": "e4546b58d30ef83badb36b07dbfea227add11bf045a28780acee41f370885514",
+  "phases/00-setup-and-tooling/12-debugging-and-profiling/docs/en.md": "2c8060d42a1115002a602a1db7241eb5338a7169661c238163c16c5653136513",
+  "phases/00-setup-and-tooling/13-python-for-ai-engineering/docs/en.md": "f8995bff8d2189e09fc41ec32c9eb6594653e1f19a9053d1c77c7abd8d41b938"
+}

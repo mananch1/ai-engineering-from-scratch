@@ -1,0 +1,23 @@
+{
+  "phases/02-ml-fundamentals/01-what-is-machine-learning/docs/en.md": "a81964a035da5a6ed3e69d48a66caea2d02d7cbe28d0e3bd573069fab831eef0",
+  "phases/02-ml-fundamentals/02-linear-regression/docs/en.md": "59d2f3f919657d7770e71eb25aaef772f5d2de89bd46bc3749eb7f03d5daaa3f",
+  "phases/02-ml-fundamentals/03-logistic-regression/docs/en.md": "9853f595623003ac5870c01e8bd9e4ae27c65e26fc4c8c89c5d823a360a97660",
+  "phases/02-ml-fundamentals/04-decision-trees/docs/en.md": "4b0f504a762eee1962ec224f7ace1863c22051223116185151a1fe4a01d80546",
+  "phases/02-ml-fundamentals/05-support-vector-machines/docs/en.md": "a863b633b409bb5be6360fb07ac35bf132d955b3d65a595f28de5d9f85097da8",
+  "phases/02-ml-fundamentals/06-knn-and-distances/docs/en.md": "bff69e9324c6c54ef76f589965a4f3df5ba5ccbbcbfad26550bc817ec1a90c74",
+  "phases/02-ml-fundamentals/07-unsupervised-learning/docs/en.md": "9f589f12b059d6d1b6044772c6479c01fbd0b7b330443145f31009f56828874d",
+  "phases/02-ml-fundamentals/08-feature-engineering/docs/en.md": "4b69623669fe49051971e28ec6e60f5fa84871f356cf311305400907ad5afd3b",
+  "phases/02-ml-fundamentals/09-model-evaluation/docs/en.md": "ffa5dbf1775f0cd8008099cebb460f484e61ac51b3c0e9b665b0563cf486fa2a",
+  "phases/02-ml-fundamentals/10-bias-variance/docs/en.md": "90827a05e5efc693817fa7586d178bd0a2a889f39fe73570c6a669b01485a9b1",
+  "phases/02-ml-fundamentals/11-ensemble-methods/docs/en.md": "497158df5ec8f89881419cc43414a1a3dceb6ed23376dba300bdf93f04cde67b",
+  "phases/02-ml-fundamentals/12-hyperparameter-tuning/docs/en.md": "9f72e12d7734382f385eb5b5bdefb65f6286284f8483c448a9c548300ed949bb",
+  "phases/02-ml-fundamentals/13-ml-pipelines/docs/en.md": "058d092b6ad38b5a9eaf4a3fc296aac5867d0e99e60ba40ce0cc20b7326820d9",
+  "phases/02-ml-fundamentals/14-naive-bayes/docs/en.md": "c6a0a270697261df063484940432c6087e7d88026b4accbab468d2940b1f5c1d",
+  "phases/02-ml-fundamentals/15-time-series/docs/en.md": "9e7be648954eb64887647754f4f2347b575f598c2720f82f3fe107cd47fa2ad3",
+  "phases/02-ml-fundamentals/16-anomaly-detection/docs/en.md": "efe48f9f7a4642702b5cfc06e9203460097f78b2b115ad72949d8d11518e886e",
+  "phases/02-ml-fundamentals/17-imbalanced-data/docs/en.md": "68208483176b73e9d39b4158fb66115e649258cfe554e04b624998538cc74c4f",
+  "phases/02-ml-fundamentals/18-feature-selection/docs/en.md": "ae14a559c169dc64e4ebddbebfc84b3c2321a5ba5f2ef1fee8fab532e8e0db49",
+  "phases/02-ml-fundamentals/19-ml-system-design/docs/en.md": "4e7a93c271f20f99fc9514f2e1dece8cd17051694dc554174ae533e23d404fa8",
+  "phases/02-ml-fundamentals/20-model-monitoring-and-drift/docs/en.md": "67ed1a1ed2ff0330085ca582c4068f307318a126ad1b6c591ce56a7022bfa082",
+  "phases/02-ml-fundamentals/21-feature-stores-and-training-serving-skew/docs/en.md": "4d63c14290d143ba7850ae4a6a15c3f6db968e2f9a3e1215c853c4e83cc623a5"
+}
